@@ -1,0 +1,233 @@
+<?php
+
+/**
+ * @file
+ */
+ 
+ /**
+ * Implements hook_menu().
+ */
+function redtest_common_menu() {
+  $items = array();
+  $items['save_data'] = array(
+    'title' => 'test',
+    'page callback' => 'redtest_commom_save_data',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+ 
+function redtest_commom_save_data() {
+	global $user;
+	module_load_include('inc', 'node', 'node.pages');
+	$form_id = 'article_node_form';
+	$node = (object) array(
+		'uid' => $user->uid,
+		'name' => $user->name,
+		'type' => 'article',
+		'language' => LANGUAGE_NONE,
+	);
+  
+  $form_state = array();
+  $form_state['values'] = array();
+  $form_state['values']['op'] = t('Save');
+  if (!isset($form_state['build_info']['args'])) {
+    $form_state['build_info']['args'] = array($node);
+  }
+  $form_state += form_state_defaults();
+  $form_state['input'] = $form_state['values'];
+  $form_state['programmed'] = TRUE;
+  $form = drupal_retrieve_form($form_id, $form_state);
+  $form_state['values']['title'] = 'Custom Node Created at '.time();
+ 
+  
+    $field_boolean_single_checkbox_1 = 1;
+    $field_boolean_single_checkbox_2 = 1;
+    $field_boolean_single_checkbox_3 = 1;
+    $field_boolean_single_checkbox_4 = 1;
+    $field_boolean_single_checkbox_5 = 1;
+    $field_boolean_single_checkbox_6 = 1;
+    $field_boolean_single_checkbox_7 = 1;
+    $field_boolean_single_checkbox_8 = 1;
+  
+    $data['field_boolean_single_checkbox_1'] = array($field_boolean_single_checkbox_1);
+    $data['field_boolean_single_checkbox_2'] = array($field_boolean_single_checkbox_2);
+    $data['field_boolean_single_checkbox_3'] = array($field_boolean_single_checkbox_3);
+    $data['field_boolean_single_checkbox_4'] = array($field_boolean_single_checkbox_4);
+    $data['field_boolean_single_checkbox_5'] = array($field_boolean_single_checkbox_5);
+    $data['field_boolean_single_checkbox_6'] = array($field_boolean_single_checkbox_6);
+    $data['field_boolean_single_checkbox_7'] = array($field_boolean_single_checkbox_7);
+    $data['field_boolean_single_checkbox_8'] = array($field_boolean_single_checkbox_8);
+    
+    $data['field_boolean_checkboxes_1'] = array(0,1);
+    
+    $field_decimal_single_textfield_1 = 4.3;
+    $data['field_decimal_single_textfield_1'] = $field_decimal_single_textfield_1;
+    
+    
+    $field_decimal_single_textfield_2 = 1;
+    $data['field_decimal_single_textfield_2'] = $field_decimal_single_textfield_2;
+    
+   
+    $data['field_decimal_multiple_textfield'] = 
+    array(
+     array('value' =>7.2),
+     array('value' =>7.4),
+    );
+    
+    $data['field_decimal_multiple_text_2'] =
+    array(
+     array('value' => 1),
+     array('value' => 3),
+    );
+    
+     
+    $field_float_single_textfield_1 = 3;
+    $data['field_float_single_textfield_1'] = $field_float_single_textfield_1;
+    
+    $field_float_single_textfield_2 = 1;
+    $data['field_float_single_textfield_2'] = $field_float_single_textfield_2;
+    
+    $data['field_float_multiple_textfield_1'] =
+    array(
+     array('value' => -9),
+     array('value' => -2),
+    );
+    
+    $data['field_float_multiple_textfield_2'] = 
+    array(
+     array('value' => 9),
+     array('value' => 4),
+     array('value' => 3),
+     array('value' => 2),
+     array('value' => 1),
+    );
+    
+    $field_integer_single_textfield_1 = 100;
+    $data['field_integer_single_textfield_1'] = $field_integer_single_textfield_1;
+    
+    $data['field_integer_multiple_textfield'] = 
+    array(
+     array('value' => 9),
+     array('value' => 4),
+     array('value' => 3),
+     array('value' => 2),
+     array('value' => 1),
+    );
+    
+    $field_list_float_single_checkbox = '1.2';
+    $data['field_list_float_single_checkbox'] = array($field_list_float_single_checkbox);
+    
+    $data['field_list_float_checkboxes_1'] = array('2.3',1,2,'4.5');
+    $data['field_list_float_checkboxes_2'] = array(9,'3.1','8.9');
+    
+    $field_list_integer_single_checkb = 2;
+    $data['field_list_integer_single_checkb'] = array($field_list_integer_single_checkb);
+    
+    
+    $data['field_list_int_single_checkbox_2'] = array(3,9,6);
+    
+    $field_list_float_single_check_2 = '2.3'; 
+    $data['field_list_float_single_check_2'] = array($field_list_float_single_check_2);
+    
+		$data['field_list_int_mult_checkboxes_1'] = array(3, 67); // 3, 67, 8, 0
+		$data['field_list_int_mult_checkboxes_2'] = array(45, 9); // 45, 9, 0, 3
+		
+		$field_list_text_single_check_1 = 'a';
+		$data['field_list_text_single_check_1'] = array($field_list_text_single_check_1); // a,c,d
+		
+		$field_list_text_single_check_2 = 'av';
+		$data['field_list_text_single_check_2'] = array($field_list_text_single_check_2);// av, bv, dv
+		
+		$data['field_list_text_multi_checkbox_1'] = array('a','b','c');
+		$data['field_list_text_multi_checkbox_2'] = array('a','b','d');
+    
+  
+  
+  $form_state['values']['field_boolean_single_checkbox_1'][LANGUAGE_NONE] = $data['field_boolean_single_checkbox_1'];
+  $form_state['values']['field_boolean_single_checkbox_2'][LANGUAGE_NONE] = $data['field_boolean_single_checkbox_2'];
+  $form_state['values']['field_boolean_single_checkbox_3'][LANGUAGE_NONE] = $data['field_boolean_single_checkbox_3'];
+  $form_state['values']['field_boolean_single_checkbox_4'][LANGUAGE_NONE] = $data['field_boolean_single_checkbox_4'];
+  $form_state['values']['field_boolean_single_checkbox_5'][LANGUAGE_NONE] = $data['field_boolean_single_checkbox_5'];
+  $form_state['values']['field_boolean_single_checkbox_6'][LANGUAGE_NONE] = $data['field_boolean_single_checkbox_6'];
+  $form_state['values']['field_boolean_single_checkbox_7'][LANGUAGE_NONE] = $data['field_boolean_single_checkbox_7'];
+  $form_state['values']['field_boolean_single_checkbox_8'][LANGUAGE_NONE] = $data['field_boolean_single_checkbox_8'];
+  
+  
+  $form_state['values']['field_boolean_checkboxes_1'][LANGUAGE_NONE] = $data['field_boolean_checkboxes_1']; // mul
+  $form_state['values']['field_decimal_single_textfield_1'][LANGUAGE_NONE][0]['value'] = $data['field_decimal_single_textfield_1'];
+  $form_state['values']['field_decimal_single_textfield_2'][LANGUAGE_NONE][0]['value'] = $data['field_decimal_single_textfield_2'];
+  
+ $form_state['values']['field_decimal_multiple_textfield'][LANGUAGE_NONE] = $data['field_decimal_multiple_textfield'];
+ $form_state['values']['field_decimal_multiple_text_2'][LANGUAGE_NONE] = $data['field_decimal_multiple_text_2'];
+ 
+ 
+  $form_state['values']['field_float_multiple_textfield_1'][LANGUAGE_NONE] = $data['field_float_multiple_textfield_1'];
+  $form_state['values']['field_float_multiple_textfield_2'][LANGUAGE_NONE] = $data['field_float_multiple_textfield_2'];
+  $form_state['values']['field_integer_multiple_textfield'][LANGUAGE_NONE] = $data['field_integer_multiple_textfield'];
+  $form_state['values']['field_list_float_checkboxes_1'][LANGUAGE_NONE] = $data['field_list_float_checkboxes_1'];
+  $form_state['values']['field_list_float_checkboxes_2'][LANGUAGE_NONE] = $data['field_list_float_checkboxes_2'];
+  $form_state['values']['field_list_int_single_checkbox_2'][LANGUAGE_NONE] = $data['field_list_int_single_checkbox_2'];
+  
+  $form_state['values']['field_list_int_mult_checkboxes_1'][LANGUAGE_NONE] = $data['field_list_int_mult_checkboxes_1']; // mul
+  $form_state['values']['field_list_int_mult_checkboxes_2'][LANGUAGE_NONE] = $data['field_list_int_mult_checkboxes_2']; // mul 
+  $form_state['values']['field_list_text_multi_checkbox_1'][LANGUAGE_NONE] = $data['field_list_text_multi_checkbox_1']; // mul
+  $form_state['values']['field_list_text_multi_checkbox_2'][LANGUAGE_NONE] = $data['field_list_text_multi_checkbox_2'];
+  
+  
+  $form_state['values']['field_float_single_textfield_1'][LANGUAGE_NONE][0]['value'] = $data['field_float_single_textfield_1'];
+  $form_state['values']['field_float_single_textfield_2'][LANGUAGE_NONE][0]['value'] = $data['field_float_single_textfield_2'];
+  $form_state['values']['field_integer_single_textfield_1'][LANGUAGE_NONE][0]['value'] = $data['field_integer_single_textfield_1'];
+  
+  $form_state['values']['field_list_float_single_checkbox'][LANGUAGE_NONE] = $data['field_list_float_single_checkbox'];
+  
+  $form_state['values']['field_list_integer_single_checkb'][LANGUAGE_NONE] = $data['field_list_integer_single_checkb'];
+   
+  $form_state['values']['field_list_float_single_check_2'][LANGUAGE_NONE] = $data['field_list_float_single_check_2'];
+  
+  $form_state['values']['field_list_text_single_check_1'][LANGUAGE_NONE] = $data['field_list_text_single_check_1']; 
+  $form_state['values']['field_list_text_single_check_2'][LANGUAGE_NONE] = $data['field_list_text_single_check_2'];
+  
+  dsm($form_state['values']);
+  
+  // Loop through fields to discover multiple fields
+	foreach(element_children($form_state['values']) as $fieldname) {
+		if(isset($form_state['values'][$fieldname][LANGUAGE_NONE]) && count($form_state['values'][$fieldname][LANGUAGE_NONE]) > 1 ) {
+			$element = drupal_array_get_nested_value($form, array($fieldname,LANGUAGE_NONE));
+			$field_name = $element['#field_name'];
+			$langcode = $element['#language'];
+			$parents = $element['#field_parents'];
+		 
+			// Increment the items count.
+			$field_state = field_form_get_state($parents, $field_name, $langcode, $form_state);
+			$field_state['items_count'] = count($form_state['values'][$fieldname][LANGUAGE_NONE]) - 1;
+			field_form_set_state($parents, $field_name, $langcode, $form_state, $field_state);
+      //$form = drupal_rebuild_form($form_id, $form_state, $form);
+		}
+	}
+
+  drupal_form_submit('article_node_form', $form_state, (object)$node);
+  $errors = form_get_errors();
+	if (!empty($errors)) {
+		foreach ($errors as $field_name => $message) {
+			watchdog('MYMODULE', '%field: %message', array('%message'=> $message, '%field' => $field_name));
+		}
+	}
+	dsm($node);
+	return 'done';
+}
+
+ 
+function redtest_common_form_alter(&$form, &$form_state, $form_id) {
+  if ('article_node_form' == $form_id) {
+    $form['#submit'][] = 'test';
+  }
+}
+
+function test(&$form, &$form_state) {
+  
+}
+
+
+

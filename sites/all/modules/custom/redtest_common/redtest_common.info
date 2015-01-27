@@ -1,0 +1,4 @@
+name = RedTest Common
+description = Common configuration
+package = RedTest Custom
+core = 7.x
