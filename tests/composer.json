@@ -1,28 +1,14 @@
 {
     "require": {
-        "guzzle/guzzle": "dev-master"
+        "redcrackle/redtest-core": "*"
     },
     "minimum-stability": "dev",
     "config": {
         "bin-dir": "bin/"
     },
-    "require-dev": {
-        "phpunit/phpunit": "4.*"
-    },
     "autoload": {
-        "classmap": [
-            "phpunit_tests",
-            "phpunit_tests/core",
-            "phpunit_tests/core/entities",
-            "phpunit_tests/core/forms",
-            "phpunit_tests/custom",
-            "phpunit_tests/custom/entities",
-            "phpunit_tests/custom/entities/node",
-            "phpunit_tests/custom/entities/taxonomy_term",
-            "phpunit_tests/custom/forms",
-            "phpunit_tests/custom/forms/entities",
-            "phpunit_tests/custom/forms/entities/node",
-            "phpunit_tests/custom/forms/entities/taxonomy_term"
-        ]
+        "psr-4": {
+            "RedTest\\": "RedTest/"
+        }
     }
 }

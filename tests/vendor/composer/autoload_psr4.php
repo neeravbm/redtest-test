@@ -6,5 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'RedTest\\core\\' => array($vendorDir . '/redcrackle/redtest-core/src'),
+    'RedTest\\' => array($baseDir . '/RedTest'),
     'Doctrine\\Instantiator\\' => array($vendorDir . '/doctrine/instantiator/src/Doctrine/Instantiator'),
 );
