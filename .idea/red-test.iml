@@ -7,10 +7,10 @@
     <orderEntry type="module-library">
       <library name="PHP">
         <CLASSES>
-          <root url="file:///usr/local/Cellar/php53/5.3.29/lib/php" />
+          <root url="file:///usr/share/php" />
         </CLASSES>
         <SOURCES>
-          <root url="file:///usr/local/Cellar/php53/5.3.29/lib/php" />
+          <root url="file:///usr/share/php" />
         </SOURCES>
       </library>
     </orderEntry>

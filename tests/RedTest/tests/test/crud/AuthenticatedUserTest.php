@@ -75,6 +75,8 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
     );
     list($success, $values, $msg) = $testForm->fillBody($values);
 
+    list($success, $values, $msg) = Text::fillValues($testForm, 'body', $values);
+
     list($success, $testObject, $errors) = $testForm->submit();
     $this->assertTrue(
       $success,
