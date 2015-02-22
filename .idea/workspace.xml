@@ -1,20 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0b804b89-440c-42c4-ae87-4194bd98e6c1" name="Default" comment="Changes">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/vendor/symfony/event-dispatcher/Symfony/Component/EventDispatcher" afterPath="$PROJECT_DIR$/tests/vendor/symfony/event-dispatcher/Symfony/Component/EventDispatcher" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/vendor/symfony/yaml/Symfony/Component/Yaml" afterPath="$PROJECT_DIR$/tests/vendor/symfony/yaml/Symfony/Component/Yaml" />
+    <list default="true" id="0b804b89-440c-42c4-ae87-4194bd98e6c1" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/vendor/redcrackle/redtest-core" afterPath="$PROJECT_DIR$/tests/vendor/redcrackle/redtest-core" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/RedTest/tests/test/crud/AuthenticatedUserTest.php" afterPath="$PROJECT_DIR$/tests/RedTest/tests/test/crud/AuthenticatedUserTest.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/RedTest/entities/Node/Test.php" afterPath="$PROJECT_DIR$/tests/RedTest/entities/Node/Test.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/RedTest/forms/entities/Node/TestForm.php" afterPath="$PROJECT_DIR$/tests/RedTest/forms/entities/Node/TestForm.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/vendor/autoload.php" afterPath="$PROJECT_DIR$/tests/vendor/autoload.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/vendor/composer/autoload_psr4.php" afterPath="$PROJECT_DIR$/tests/vendor/composer/autoload_psr4.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/vendor/composer/autoload_real.php" afterPath="$PROJECT_DIR$/tests/vendor/composer/autoload_real.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/composer.json" afterPath="$PROJECT_DIR$/tests/composer.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/composer.lock" afterPath="$PROJECT_DIR$/tests/composer.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/vendor/composer/installed.json" afterPath="$PROJECT_DIR$/tests/vendor/composer/installed.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="red-test.iws" />
@@ -387,6 +375,9 @@
     <FindUsagesManager>
       <setting name="OPEN_NEW_TAB" value="true" />
     </FindUsagesManager>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
@@ -1206,6 +1197,13 @@
       <option name="number" value="Default" />
       <updated>1421056981084</updated>
     </task>
+    <task id="LOCAL-00001" summary="Changes">
+      <created>1424563965977</created>
+      <option name="number" value="00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1424563965977</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1220,7 +1218,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3295129" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3295129" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
