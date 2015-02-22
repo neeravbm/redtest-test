@@ -4,8 +4,62 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ed3ed1f58e3e9041e41bab180c185bd9",
+    "hash": "16a554a0b9e89fb9d2eacc32797eebf2",
     "packages": [
+        {
+            "name": "fzaninotto/faker",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fzaninotto/Faker.git",
+                "reference": "74f58bbda974d0820183d228f120c2f3258bf7f6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/74f58bbda974d0820183d228f120c2f3258bf7f6",
+                "reference": "74f58bbda974d0820183d228f120c2f3258bf7f6",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0",
+                "squizlabs/php_codesniffer": "~1.5"
+            },
+            "suggest": {
+                "ext-intl": "*"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.5.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Faker\\": "src/Faker/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "François Zaninotto"
+                }
+            ],
+            "description": "Faker is a PHP library that generates fake data for you.",
+            "keywords": [
+                "data",
+                "faker",
+                "fixtures"
+            ],
+            "time": "2015-02-19 08:29:00"
+        }
+    ],
+    "packages-dev": [
         {
             "name": "doctrine/instantiator",
             "version": "dev-master",
@@ -641,18 +695,21 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/redcrackle/redtest-core.git",
-                "reference": "e8357e7cd59ad6edbdd9d411556aeed1afb64b4f"
+                "reference": "b5dd73125ac6aec5492d8f6cbda8637a3663604e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/redcrackle/redtest-core/zipball/e8357e7cd59ad6edbdd9d411556aeed1afb64b4f",
-                "reference": "e8357e7cd59ad6edbdd9d411556aeed1afb64b4f",
+                "url": "https://api.github.com/repos/redcrackle/redtest-core/zipball/b5dd73125ac6aec5492d8f6cbda8637a3663604e",
+                "reference": "b5dd73125ac6aec5492d8f6cbda8637a3663604e",
                 "shasum": ""
             },
             "require": {
                 "guzzle/guzzle": "dev-master",
                 "php": ">=5.3.0",
                 "phpunit/phpunit": "4.*"
+            },
+            "suggest": {
+                "fzaninotto/faker": "Allows better fake text data to be used for testing"
             },
             "type": "library",
             "autoload": {
@@ -678,7 +735,7 @@
                 "integration testing",
                 "phpunit"
             ],
-            "time": "2015-02-16 02:12:37"
+            "time": "2015-02-21 20:30:34"
         },
         {
             "name": "sebastian/comparator",
@@ -1058,12 +1115,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/EventDispatcher.git",
-                "reference": "2dc33aff298b20ad099ac456034aebc5055f02fb"
+                "reference": "ce9246f87133be616f5db06b5e162f5210f95280"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/EventDispatcher/zipball/2dc33aff298b20ad099ac456034aebc5055f02fb",
-                "reference": "2dc33aff298b20ad099ac456034aebc5055f02fb",
+                "url": "https://api.github.com/repos/symfony/EventDispatcher/zipball/ce9246f87133be616f5db06b5e162f5210f95280",
+                "reference": "ce9246f87133be616f5db06b5e162f5210f95280",
                 "shasum": ""
             },
             "require": {
@@ -1074,6 +1131,7 @@
                 "symfony/config": "~2.0,>=2.0.5|~3.0.0",
                 "symfony/dependency-injection": "~2.6|~3.0.0",
                 "symfony/expression-language": "~2.6|~3.0.0",
+                "symfony/phpunit-bridge": "~2.7|~3.0.0",
                 "symfony/stopwatch": "~2.3|~3.0.0"
             },
             "suggest": {
@@ -1107,7 +1165,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "http://symfony.com",
-            "time": "2015-02-11 07:17:51"
+            "time": "2015-02-18 10:38:04"
         },
         {
             "name": "symfony/yaml",
@@ -1116,16 +1174,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "43aac3461a5679f486f7c96e4d7e780a59fec997"
+                "reference": "d04b39229628a0cc36ae5616db9c7f6f7119ac8f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/43aac3461a5679f486f7c96e4d7e780a59fec997",
-                "reference": "43aac3461a5679f486f7c96e4d7e780a59fec997",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/d04b39229628a0cc36ae5616db9c7f6f7119ac8f",
+                "reference": "d04b39229628a0cc36ae5616db9c7f6f7119ac8f",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.9"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "~2.7|~3.0.0"
             },
             "type": "library",
             "extra": {
@@ -1154,10 +1215,9 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2015-02-11 07:17:51"
+            "time": "2015-02-18 10:38:04"
         }
     ],
-    "packages-dev": [],
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": [],

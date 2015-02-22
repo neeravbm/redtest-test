@@ -9,8 +9,10 @@
 namespace tests\RedTest\tests\test\crud;
 
 use RedTest\core\entities\User;
+use RedTest\core\fields\Text;
 use RedTest\core\Utilities;
 use RedTest\entities\Node\Test;
+use RedTest\forms\entities\Node\TestForm;
 
 /**
  * Drupal root directory.
@@ -41,11 +43,47 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
     /**
      * @var Test $testObject
      */
-    list($success, $testObject, $msg) = Test::createDefault();
+    /*list($success, $testObject, $msg) = Test::createDefault();
     $this->assertTrue(
       $success,
       "Authenticated user is not able to create a Test node: " . $msg
+    );*/
+
+    $testForm = new TestForm();
+    list($success, $fields, $msg) = $testForm->fillDefaultValues(
+      array('body')
     );
+    $this->assertTrue(
+      $success,
+      "Authenticated user is not able to fill default fields: " . $msg
+    );
+    /*list($success, $values, $msg) = $testForm->fillDefaultBodyValues();
+    $this->assertTrue(
+      $success,
+      "Authenticated user is not able to fill Body field: " . $msg
+    );*/
+    list($success, $values, $msg) = Text::fillDefaultValues($testForm, 'body');
+
+    list($success, $values, $msg) = Text::fillDefaultTextTextAreaWithSummaryValues($testForm, 'body');
+
+    $values = array(
+      array(
+        'value' => Utilities::getRandomText(100),
+        'summary' => Utilities::getRandomText(25),
+        'format' => 'php_code',
+      )
+    );
+    list($success, $values, $msg) = $testForm->fillBody($values);
+
+    list($success, $testObject, $errors) = $testForm->submit();
+    $this->assertTrue(
+      $success,
+      "Authenticated user is not able to create a Test node: " . implode(
+        ", ",
+        $errors
+      )
+    );
+
   }
 
   public static function tearDownAfterClass() {

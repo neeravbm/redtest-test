@@ -8,5 +8,6 @@ $baseDir = dirname($vendorDir);
 return array(
     'RedTest\\core\\' => array($vendorDir . '/redcrackle/redtest-core/src'),
     'RedTest\\' => array($baseDir . '/RedTest'),
+    'Faker\\' => array($vendorDir . '/fzaninotto/faker/src/Faker'),
     'Doctrine\\Instantiator\\' => array($vendorDir . '/doctrine/instantiator/src/Doctrine/Instantiator'),
 );

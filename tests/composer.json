@@ -1,5 +1,8 @@
 {
     "require": {
+        "fzaninotto/faker": "*"
+    },
+    "require-dev": {
         "redcrackle/redtest-core": "*"
     },
     "minimum-stability": "dev",
