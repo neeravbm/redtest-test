@@ -9,6 +9,7 @@
 namespace tests\RedTest\tests\test\crud;
 
 use RedTest\core\entities\User;
+use RedTest\core\fields\Field;
 use RedTest\core\fields\Text;
 use RedTest\core\Utilities;
 use RedTest\entities\Node\Test;
@@ -50,21 +51,36 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
     );*/
 
     $testForm = new TestForm();
+
     list($success, $fields, $msg) = $testForm->fillDefaultValues(
-      array('body')
+      array('field_long_text_summary_1')
     );
     $this->assertTrue(
       $success,
       "Authenticated user is not able to fill default fields: " . $msg
     );
-    /*list($success, $values, $msg) = $testForm->fillDefaultBodyValues();
-    $this->assertTrue(
-      $success,
-      "Authenticated user is not able to fill Body field: " . $msg
-    );*/
-    list($success, $values, $msg) = Text::fillDefaultValues($testForm, 'body');
 
-    list($success, $values, $msg) = Text::fillDefaultTextTextAreaWithSummaryValues($testForm, 'body');
+    list($success, $fields, $msg) = $testForm->fillDefaultFieldLongTextSummary1Values(
+    );
+
+    list($success, $values, $msg) = $testForm->fillDefaultFieldValues(
+      'field_long_text_summary_1'
+    );
+
+    list($success, $values, $msg) = Field::fillDefaultValues(
+      $testForm,
+      'field_long_text_summary_1'
+    );
+
+    list($success, $values, $msg) = Text::fillDefaultValues(
+      $testForm,
+      'field_long_text_summary_1'
+    );
+
+    list($success, $values, $msg) = Text::fillDefaultTextTextAreaWithSummaryValues(
+      $testForm,
+      'field_long_text_summary_1'
+    );
 
     $values = array(
       array(
@@ -73,9 +89,27 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
         'format' => 'php_code',
       )
     );
-    list($success, $values, $msg) = $testForm->fillBody($values);
+    list($success, $values, $msg) = $testForm->fillFieldValues(
+      'field_long_text_summary_1',
+      $values
+    );
 
-    list($success, $values, $msg) = Text::fillValues($testForm, 'body', $values);
+    list($success, $values, $msg) = Text::fillValues(
+      $testForm,
+      'field_long_text_summary_1',
+      $values
+    );
+
+    list($success, $values, $msg) = Text::fillTextTextAreaWithSummaryValues(
+      $testForm,
+      'field_long_text_summary_1',
+      $values
+    );
+
+    $this->assertTrue(
+      $success,
+      "Authenticated user is not able to fill Body field: " . $msg
+    );
 
     list($success, $testObject, $errors) = $testForm->submit();
     $this->assertTrue(
