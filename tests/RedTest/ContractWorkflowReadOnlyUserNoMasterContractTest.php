@@ -174,12 +174,12 @@ class ContractWorkflowReadOnlyUserNoMasterContractTest extends \PHPUnit_Framewor
       "User with ReadOnly role does not have access to view the Contracting Family field of a published contract."
     );
     /*$this->assertEquals(
-      Utilities::getId(self::$fields['field_contracting_family']),
+      Utils::getId(self::$fields['field_contracting_family']),
       self::$contractObject->getFieldContractingFamily(),
       "User with ReadOnly role is seeing incorrect Contract Family values."
     );
     $this->assertEquals(
-      Utilities::getId(self::$fields['field_contracting_family']),
+      Utils::getId(self::$fields['field_contracting_family']),
       self::$contractObject->viewFieldContractingFamily(),
       "User with ReadOnly role is seeing incorrect Contract Family values."
     );*/
@@ -204,7 +204,7 @@ class ContractWorkflowReadOnlyUserNoMasterContractTest extends \PHPUnit_Framewor
       "User with ReadOnly role does not have access to view the Contract Company field of a published contract."
     );
     /*$this->assertEquals(
-      Utilities::getId(self::$fields['field_contract_company']),
+      Utils::getId(self::$fields['field_contract_company']),
       self::$contractObject->getFieldContractCompany(),
       "User with ReadOnly role is seeing incorrect Contract Company values."
     );*/

@@ -10,7 +10,7 @@ namespace RedTest\tests\accesslog\service_access;
 
 use RedTest\core\entities\User as User;
 use RedTest\core\Service as Service;
-use RedTest\core\Utilities as Utilities;
+use RedTest\core\Utils as Utilities;
 use RedTest\entities\Node\Contract as Contract;
 
 /**
@@ -93,7 +93,7 @@ class TalentContributorUserTest extends \PHPUnit_Framework_TestCase {
    * Simulate file download action.
    */
   private static function simulateFileDownloadAction() {
-    $_SERVER['HTTP_REFERER'] = Utilities::getRandomString();
+    $_SERVER['HTTP_REFERER'] = Utils::getRandomString();
 
     // Iterate over the files and execute drupal_page_footer() once for each.
     $files = self::$contractObject->getFieldContractFiles(FALSE);
@@ -296,7 +296,7 @@ class TalentContributorUserTest extends \PHPUnit_Framework_TestCase {
     $userObject = User::loginProgrammatically(self::ADMINISTRATOR_USER);
     // Make sure that wrong username filter results in empty response.
     $options = array(
-      'userid' => Utilities::getRandomString(),
+      'userid' => Utils::getRandomString(),
       'timestamp' => array(
         'min' => '-1 day',
         'max' => '1 day',

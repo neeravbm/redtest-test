@@ -11,7 +11,7 @@ namespace tests\RedTest\tests\test\crud;
 use RedTest\core\entities\User;
 use RedTest\core\fields\Field;
 use RedTest\core\fields\Text;
-use RedTest\core\Utilities;
+use RedTest\core\Utils;
 use RedTest\entities\Node\Test;
 use RedTest\forms\entities\Node\TestForm;
 
@@ -52,7 +52,7 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
 
     $testForm = new TestForm();
 
-    list($success, $fields, $msg) = $testForm->fillDefaultValues(
+    list($success, $fields, $msg) = $testForm->fillDefaultValuesExcept(
       array('field_long_text_summary_1')
     );
     $this->assertTrue(
@@ -84,11 +84,18 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
 
     $values = array(
       array(
-        'value' => Utilities::getRandomText(100),
-        'summary' => Utilities::getRandomText(25),
+        'value' => Utils::getRandomText(100),
+        'summary' => Utils::getRandomText(25),
         'format' => 'php_code',
       )
     );
+
+    list($success, $msg) = $testForm->fillDefaultFieldLongTextSummary1($values);
+    $this->assertTrue(
+      $success,
+      "Authenticated user is not able to fill Body field: " . $msg
+    );
+
     list($success, $values, $msg) = $testForm->fillFieldValues(
       'field_long_text_summary_1',
       $values
@@ -100,6 +107,13 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
       $values
     );
 
+    $values = array(
+      array(
+        'value' => Utils::getRandomText(100),
+        'summary' => Utils::getRandomText(25),
+        'format' => 'php_code',
+      )
+    );
     list($success, $values, $msg) = Text::fillTextTextAreaWithSummaryValues(
       $testForm,
       'field_long_text_summary_1',
@@ -124,6 +138,6 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
 
   public static function tearDownAfterClass() {
     self::$userObject->logout();
-    Utilities::deleteCreatedEntities();
+    //Utils::deleteCreatedEntities();
   }
 }

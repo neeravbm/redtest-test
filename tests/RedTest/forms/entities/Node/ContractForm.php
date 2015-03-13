@@ -47,7 +47,7 @@ class ContractForm extends NodeForm {
     $fields = array();
 
     /*$contractedFamilyForm = new ContractedFamilyForm();
-    $contractedFamilyForm->fillName(Utilities::getRandomString());
+    $contractedFamilyForm->fillName(Utils::getRandomString());
     $output = $contractedFamilyForm->submit();
     self::assertTrue(
       $output,
@@ -204,13 +204,13 @@ $contractForm->fillFieldContractFiles(
     /*if (!in_array('field_territory', $skip)) {
       list($success, $territoryNowObjects, $msg) = TerritoryNow::createDefault(
         $entities,
-        Utilities::getRandomInt(2, 5)
+        Utils::getRandomInt(2, 5)
       );
       if (!$success) {
         return array(FALSE, $fields, $msg);
       }
       $fields['field_territory'] = $territoryNowObjects;
-      $this->fillFieldTerritory(Utilities::getId($fields['field_territory']));
+      $this->fillFieldTerritory(Utils::getId($fields['field_territory']));
     }*/
 
     if (!in_array('field_exclusivity_holdback', $skip)) {
@@ -471,7 +471,7 @@ $contractForm->fillFieldContractFiles(
     }
 
     if (!in_array('field_executed', $skip)) {
-      $fields['field_executed'] = 0;//Utilities::getRandomInt(0, 1);
+      $fields['field_executed'] = 0;//Utils::getRandomInt(0, 1);
       $this->fillFieldExecuted($fields['field_executed']);
     }
 

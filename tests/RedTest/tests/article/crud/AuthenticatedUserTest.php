@@ -9,7 +9,7 @@
 namespace tests\RedTest\tests\article\crud;
 
 use RedTest\core\entities\User;
-use RedTest\core\Utilities;
+use RedTest\core\Utils;
 use RedTest\entities\Node\Article;
 
 /**
@@ -46,6 +46,6 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
   }
 
   public static function tearDownAfterClass() {
-    Utilities::deleteCreatedEntities();
+    Utils::deleteCreatedEntities();
   }
 }

@@ -820,7 +820,7 @@ jQuery.extend({
 	},
 
 	// Use of jQuery.browser is frowned upon.
-	// More details: http://docs.jquery.com/Utilities/jQuery.browser
+	// More details: http://docs.jquery.com/Utils/jQuery.browser
 	uaMatch: function( ua ) {
 		ua = ua.toLowerCase();
 
