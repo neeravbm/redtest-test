@@ -8,7 +8,7 @@
 
 namespace RedTest\forms\entities\Node;
 
-use RedTest\core\forms\NodeForm as NodeForm;
+use RedTest\core\forms\entities\Node\NodeForm;
 
 class ArticleForm extends NodeForm {
 

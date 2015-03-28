@@ -22,4 +22,4 @@ class TestForm extends NodeForm {
   public function __construct($nid = NULL) {
     parent::__construct($nid);
   }
-} 
+}

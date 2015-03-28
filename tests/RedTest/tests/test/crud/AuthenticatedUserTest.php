@@ -25,6 +25,8 @@ drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 
 class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
 
+  protected $backupGlobalsBlacklist = array('user');
+
   /**
    * @var User
    */
@@ -37,10 +39,12 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
       "Authenticated user could not be created: " . $msg
     );
 
-    self::$userObject = User::loginProgrammatically($userObject->name);
+    self::$userObject = User::loginProgrammatically(
+      $userObject->getEntity()->name
+    );
   }
 
-  public function testCreation() {
+  //public function testCreation() {
     /**
      * @var Test $testObject
      */
@@ -50,7 +54,7 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
       "Authenticated user is not able to create a Test node: " . $msg
     );*/
 
-    $testForm = new TestForm();
+    /*$testForm = new TestForm();
 
     list($success, $fields, $msg) = $testForm->fillDefaultValuesExcept(
       array('field_long_text_summary_1')
@@ -111,7 +115,7 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
       array(
         'value' => Utils::getRandomText(100),
         'summary' => Utils::getRandomText(25),
-        'format' => 'php_code',
+        'format' => 'filtered_html',
       )
     );
     list($success, $values, $msg) = Text::fillTextTextAreaWithSummaryValues(
@@ -128,12 +132,14 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
     list($success, $testObject, $errors) = $testForm->submit();
     $this->assertTrue(
       $success,
-      "Authenticated user is not able to create a Test node: " . implode(
-        ", ",
+      "Authenticated user is not able to create a Test node:" . Utils::convertErrorArrayToString(
         $errors
       )
     );
+  }*/
 
+  public function testAllDefault() {
+    list($success, $testObjects, $msg) = Test::createDefault(1);
   }
 
   public static function tearDownAfterClass() {
