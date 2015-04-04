@@ -25,7 +25,7 @@ drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 
 class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
 
-  protected $backupGlobalsBlacklist = array('user');
+  protected $backupGlobalsBlacklist = array('user', 'entities');
 
   /**
    * @var User
