@@ -541,5 +541,15 @@ function _filter_valide_data_text($data, $module, $field_name) {
   return $output;
 }
 
+/**
+ * Implements hook_init().
+ */
+function redtest_common_init() {
+  /*$view = views_get_view('list_of_test_nodes');
+  $view->init_display();
+  $view->pre_execute();
+  $view->execute();
+  dsm($view);*/
+}
 
 

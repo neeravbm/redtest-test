@@ -27,17 +27,14 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
 
   private static $userObject;
 
-  protected $backupGlobalsBlacklist = array('user');
+  protected $backupGlobalsBlacklist = array('user', 'entities');
 
   public static function setupBeforeClass() {
     list($success, $userObject, $msg) = User::createDefault();
-    self::assertTrue(
-      $success,
-      "Authenticated user could not be created: " . $msg
-    );
+    self::assertTrue($success, $msg);
 
     self::$userObject = User::loginProgrammatically(
-      $userObject->getEntity()->name
+      $userObject->getUidValues()
     );
   }
 
@@ -45,11 +42,16 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
     /**
      * @var Article $articleObject
      */
-    list($success, $articleObject, $msg) = Article::createDefault(1);
-    $this->assertTrue(
-      $success,
-      "Authenticated user is not able to create an article: " . $msg
-    );
+    $articleForm = new ArticleForm();
+
+    list($success, $fields, $msg) = $articleForm->fillDefaultValues();
+    $this->assertTrue($success, $msg);
+
+    list($success, $articleObject, $msg) = $articleForm->submit();
+    $this->assertTrue($success, $msg);
+
+    list($success, $msg) = $articleObject->checkValues($fields);
+    $this->assertTrue($success, $msg);
   }
 
   public static function tearDownAfterClass() {

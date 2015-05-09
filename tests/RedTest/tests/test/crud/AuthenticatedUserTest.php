@@ -9,11 +9,11 @@
 namespace tests\RedTest\tests\test\crud;
 
 use RedTest\core\entities\User;
-use RedTest\core\fields\Field;
-use RedTest\core\fields\Text;
 use RedTest\core\Utils;
 use RedTest\entities\Node\Test;
 use RedTest\forms\entities\Node\TestForm;
+use RedTest\core\Menu;
+use RedTest\core\View;
 
 /**
  * Drupal root directory.
@@ -34,14 +34,9 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
 
   public static function setupBeforeClass() {
     list($success, $userObject, $msg) = User::createDefault();
-    self::assertTrue(
-      $success,
-      "Authenticated user could not be created: " . $msg
-    );
+    self::assertTrue($success, $msg);
 
-    self::$userObject = User::loginProgrammatically(
-      $userObject->getEntity()->name
-    );
+    self::$userObject = User::loginProgrammatically($userObject->getId());
   }
 
   //public function testCreation() {
@@ -56,7 +51,7 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
 
     /*$testForm = new TestForm();
 
-    list($success, $fields, $msg) = $testForm->fillDefaultValuesExcept(
+    list($success, $fields, $msg) = $testForm->fillDefaultValues(
       array('field_long_text_summary_1')
     );
     $this->assertTrue(
@@ -139,11 +134,73 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
   }*/
 
   public function testAllDefault() {
-    list($success, $testObjects, $msg) = Test::createDefault(1);
+    $this->assertEquals('node_add', Menu::getPageCallback('node/add/test'), "Page callback to add a Test node is incorrect.");
+
+    $this->assertTrue(Test::hasCreateAccess(), "Authenticated user does not have access to create a Test node.");
+
+    $testForm = new TestForm();
+
+    list($success, $fields, $msg) = $testForm->fillDefaultValues();
+    $this->assertTrue($success, $msg);
+
+    list($success, $nodeObject, $msg) = $testForm->submit();
+    $this->assertTrue($success, $msg);
+
+    list($success, $msg) = $nodeObject->checkValues($fields);
+    $this->assertTrue($success, $msg);
+
+    $testForm = new TestForm($nodeObject->getId());
+
+    list($success, $nodeObject, $msg) = $testForm->submit();
+    $this->assertTrue($success, $msg);
+
+    list($success, $msg) = $nodeObject->checkValues($fields);
+    $this->assertTrue($success, $msg);
+
+    $testForm = new TestForm($nodeObject->getId());
+
+    list($success, $fields, $msg) = $testForm->fillDefaultValues();
+    $this->assertTrue($success, $msg);
+
+    list($success, $nodeObject, $msg) = $testForm->submit();
+    $this->assertTrue($success, $msg);
+
+    list($success, $msg) = $nodeObject->checkValues($fields);
+    $this->assertTrue($success, $msg);
+
+    $this->assertTrue($nodeObject->hasViewAccess(), "Authenticated user does not have access to view a Test node.");
+
+    $this->assertTrue($nodeObject->hasUpdateAccess(), "Authenticated user does not have access to update a Test node.");
+
+    $this->assertTrue($nodeObject->hasDeleteAccess(), "Authenticated user does not have access to delete a Test node.");
   }
+
+  /*public function testView() {
+    $userObject = User::loginProgrammatically(1);
+    list($success, $testObjects, $msg) = Test::createDefault(3);
+    $this->assertTrue($success, $msg);
+    $userObject->logout();
+
+    list($success, $userObject, $msg) = User::createDefault();
+    $this->assertTrue($success, $msg);
+
+    $userObject = User::loginProgrammatically($userObject->getId());
+
+    Utils::sort($testObjects, "nid DESC");
+
+    $view = new View('list_of_test_nodes');
+    //print_r($view->getUrl());
+    print_r($view->hasAccess());
+    $results = $view->execute(array(807), array('type' => array('page', 'test')));
+    //print_r($view->getUrl());
+    print_r($results);
+    $this->assertTrue($view->hasValues(array(array('nid' => 142, 'node_title' => 'Trial by Author'), array('nid' => 144)), FALSE, TRUE), "View values do not match.");
+    //print_r($view->hasAccess());
+    $userObject->logout();
+  }*/
 
   public static function tearDownAfterClass() {
     self::$userObject->logout();
-    //Utils::deleteCreatedEntities();
+    Utils::deleteCreatedEntities();
   }
 }

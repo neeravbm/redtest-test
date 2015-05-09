@@ -1,0 +1,7 @@
+name = Tests
+description = Simpletest Tests for comparison
+package = RedTest Custom
+core = 7.x
+
+files[] = tests/tests.test
+files[] = tests/tests2.test
