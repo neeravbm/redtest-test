@@ -11,6 +11,7 @@ namespace tests\RedTest\tests\test2\crud;
 use RedTest\core\entities\User;
 use RedTest\core\Utils;
 use RedTest\entities\Node\Test;
+use RedTest\entities\Node\Test2;
 use RedTest\forms\entities\Node\Test2Form;
 use RedTest\forms\entities\Node\TestForm;
 use RedTest\core\Menu;
@@ -48,8 +49,8 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
     );
 
     $this->assertTrue(
-      Test::hasCreateAccess(),
-      "Authenticated user does not have access to create a Test node."
+      Test2::hasCreateAccess(),
+      "Authenticated user does not have access to create a Test 2 node."
     );
 
     /*for ($i = 0; $i < 1; $i++) {
