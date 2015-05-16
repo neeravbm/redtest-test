@@ -1,6 +1,7 @@
 {
     "require": {
-        "fzaninotto/faker": "*"
+        "fzaninotto/faker": "*",
+        "brianium/paratest": "dev-master"
     },
     "require-dev": {
         "redcrackle/redtest-core": "*"

@@ -25,7 +25,7 @@ require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
 drupal_override_server_variables();
 drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 
-class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
+class AuthenticatedUser3Test extends \PHPUnit_Framework_TestCase {
 
   protected $backupGlobalsBlacklist = array('user', 'entities');
 
@@ -68,14 +68,8 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
 
     $testForm = new Test2Form();
 
-    $skip = array('field_textfield_multi_1', 'field_textfield_multi_2');
-    list($success, $fields, $msg) = $testForm->fillDefaultValues($skip);
+    list($success, $fields, $msg) = $testForm->fillDefaultValues();
     $this->assertTrue($success, $msg);
-
-    list($success, $values, $msg) = $testForm->fillFieldTextfieldMulti1Values(array('a', 'b', 'c', 'd', 'e'));
-    $this->assertTrue($success, $msg);
-
-    $fields['field_textfield_multi_1'] = $values;
 
     list($success, $nodeObject, $msg) = $testForm->submit();
     $this->assertTrue($success, $msg);
@@ -93,13 +87,8 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
 
     $testForm = new Test2Form($nodeObject->getId());
 
-    list($success, $fields, $msg) = $testForm->fillDefaultValues($skip);
+    list($success, $fields, $msg) = $testForm->fillDefaultValues();
     $this->assertTrue($success, $msg);
-
-    list($success, $values, $msg) = $testForm->fillFieldTextfieldMulti1Values(array('a', 'b', 'c'));
-    $this->assertTrue($success, $msg);
-
-    $fields['field_textfield_multi_1'] = $values;
 
     list($success, $nodeObject, $msg) = $testForm->submit();
     $this->assertTrue($success, $msg);

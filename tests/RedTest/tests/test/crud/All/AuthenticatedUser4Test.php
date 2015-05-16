@@ -23,7 +23,7 @@ require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
 drupal_override_server_variables();
 drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 
-class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
+class AuthenticatedUser4Test extends \PHPUnit_Framework_TestCase {
 
   protected $backupGlobalsBlacklist = array('user', 'entities');
 
@@ -201,6 +201,6 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
 
   public static function tearDownAfterClass() {
     self::$userObject->logout();
-    Utils::deleteCreatedEntities();
+    //Utils::deleteCreatedEntities();
   }
 }
