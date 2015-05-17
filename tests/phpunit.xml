@@ -17,7 +17,7 @@
          verbose="true">
     <testsuites>
         <testsuite name="ParaTest Fixtures">
-            <directory>./RedTest/tests/test/crud/Fields</directory>
+            <directory>./RedTest/tests/test/crud</directory>
             <directory>./RedTest/tests/redtest_form</directory>
             <!-- <directory>./RedTest/tests/test2</directory> -->
         </testsuite>
