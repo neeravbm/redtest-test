@@ -65,7 +65,7 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
     $this->assertTrue($success, $msg);
     $fields['redtext_textfield_2'] = $values;
 
-    list($success, $msg) = $form->submit();
+    list($success, $msg) = $form->pressButton();
     $this->assertTrue($success, $msg);
 
     $this->assertEquals(

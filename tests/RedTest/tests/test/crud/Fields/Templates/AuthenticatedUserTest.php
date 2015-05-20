@@ -2,83 +2,69 @@
 /**
  * Created by PhpStorm.
  * User: neeravm
- * Date: 2/19/15
- * Time: 5:00 PM
+ * Date: 5/20/15
+ * Time: 9:15 AM
  */
 
-namespace tests\RedTest\tests\test\crud\Fields\DecimalMultipleTextfield2;
+namespace RedTest\tests\test\crud\Fields\Templates;
 
 use RedTest\core\entities\User;
 use RedTest\core\Utils;
 use RedTest\forms\entities\Node\TestForm;
 
-/**
- * Drupal root directory.
- */
-define('DRUPAL_ROOT', getcwd());
-require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
-drupal_override_server_variables();
-drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
-
-/**
- * Class AuthenticatedUserTest
- *
- * @package tests\RedTest\tests\test\crud\Fields\BooleanCheckboxes
- */
-class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
+class AuthenticatedUser extends \PHPUnit_Framework_TestCase {
 
   /**
    * @var array
    */
-  protected $backupGlobalsBlacklist = array('user', 'entities');
+  protected $backupGlobalsBlacklist = array('user', 'entities', 'language', 'language_url', 'language_content');
 
   /**
    * @var string
    */
-  private static $field_name = 'field_decimal_multiple_text_2';
+  protected $field_name;
 
   /**
    * @var string
    */
-  private static $fillFunctionName;
+  protected $fillFunctionName;
 
   /**
    * @var string
    */
-  private static $fillDefaultFunctionName;
+  protected $fillDefaultFunctionName;
 
   /**
    * @var User
    */
-  private static $userObject;
+  protected $userObject;
 
   /**
    * @var int
    */
-  private static $nid;
+  protected $nid;
 
   /**
    * @var array
    */
-  private static $fields;
+  protected $fields;
 
-  /**
-   * Create an authenticated user and log in.
-   */
-  public static function setupBeforeClass() {
-    self::$fillFunctionName = 'fill' . Utils::makeTitleCase(
-        self::$field_name
-      ) . 'Values';
-
-    self::$fillDefaultFunctionName = 'fillDefault' . Utils::makeTitleCase(
-        self::$field_name
-      ) . 'Values';
+  public function __construct($field_name) {
+    $this->field_name = $field_name;
+    $this->fillFunctionName = 'fill' . Utils::makeTitleCase($this->field_name) . 'Values';
+    $this->fillDefaultFunctionName = 'fill' . Utils::makeTitleCase($this->field_name) . 'Values';
 
     list($success, $userObject, $msg) = User::createDefault();
     self::assertTrue($success, $msg);
 
-    self::$userObject = User::loginProgrammatically($userObject->getId());
+    $this->userObject = User::loginProgrammatically($userObject->getId());
   }
+
+  /**
+   * Create an authenticated user and log in.
+   */
+  /*public static function setupBeforeClass() {
+  }*/
 
   /**
    * Submit a new test form.
@@ -86,28 +72,28 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
   public function testEmptySubmission() {
     $testForm = new TestForm();
 
-    self::$fields = self::getEmptyFieldValues();
+    $this->fields = $this->getEmptyFieldValues();
 
     list($success, $values, $msg) = $testForm->fillDefaultTitleValues();
     $this->assertTrue($success, $msg);
-    self::$fields['title'] = $values;
+    $this->fields['title'] = $values;
 
-    list($success, $values, $msg) = $testForm->{self::$fillFunctionName}();
+    list($success, $values, $msg) = $testForm->{$this->fillFunctionName}();
     $this->assertTrue($success, $msg);
     $this->assertEquals(
       array(),
       $values,
-      "Values filled into " . self::$field_name . " are not correct."
+      "Values filled into " . $this->field_name . " are not correct."
     );
-    self::$fields[self::$field_name] = $values;
+    $this->fields[$this->field_name] = $values;
 
     list($success, $nodeObject, $msg) = $testForm->submit();
     $this->assertTrue($success, $msg);
 
-    list($success, $msg) = $nodeObject->checkValues(self::$fields);
+    list($success, $msg) = $nodeObject->checkValues($this->fields);
     $this->assertTrue($success, $msg);
 
-    self::$nid = $nodeObject->getId();
+    $this->nid = $nodeObject->getId();
   }
 
   /**
@@ -116,12 +102,12 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
    * @depends testEmptySubmission
    */
   public function testEmptySubmissionWithoutChange() {
-    $testForm = new TestForm(self::$nid);
+    $testForm = new TestForm($this->nid);
 
     list($success, $nodeObject, $msg) = $testForm->submit();
     $this->assertTrue($success, $msg);
 
-    list($success, $msg) = $nodeObject->checkValues(self::$fields);
+    list($success, $msg) = $nodeObject->checkValues($this->fields);
     $this->assertTrue($success, $msg);
   }
 
@@ -131,21 +117,21 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
    * @depends testEmptySubmissionWithoutChange
    */
   public function testValueOneSubmission() {
-    $testForm = new TestForm(self::$nid);
+    $testForm = new TestForm($this->nid);
 
-    list($success, $values, $msg) = $testForm->{self::$fillFunctionName}("35,78");
+    list($success, $values, $msg) = $testForm->{$this->fillFunctionName}(1);
     $this->assertTrue($success, $msg);
     $this->assertEquals(
-      35.78,
+      1,
       $values,
-      "Values filled into " . self::$field_name . " are not correct."
+      "Values filled into " . $this->field_name . " are not correct."
     );
-    self::$fields[self::$field_name] = $values;
+    $this->fields[$this->field_name] = $values;
 
     list($success, $nodeObject, $msg) = $testForm->submit();
     $this->assertTrue($success, $msg);
 
-    list($success, $msg) = $nodeObject->checkValues(self::$fields);
+    list($success, $msg) = $nodeObject->checkValues($this->fields);
     $this->assertTrue($success, $msg);
   }
 
@@ -155,23 +141,23 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
    * @depends testValueOneSubmission
    */
   public function testValueMultipleSubmission() {
-    $testForm = new TestForm(self::$nid);
+    $testForm = new TestForm($this->nid);
 
-    list($success, $values, $msg) = $testForm->{self::$fillFunctionName}(
-      array(0.56, -9.67, "2,3")
+    list($success, $values, $msg) = $testForm->{$this->fillFunctionName}(
+      array(1, 0)
     );
     $this->assertTrue($success, $msg);
     $this->assertEquals(
-      array(0.56, -9.67, 2.3),
+      array(1, 0),
       $values,
-      "Values filled into " . self::$field_name . " are not correct."
+      "Values filled into " . $this->field_name . " are not correct."
     );
-    self::$fields[self::$field_name] = $values;
+    $this->fields[$this->field_name] = $values;
 
     list($success, $nodeObject, $msg) = $testForm->submit();
     $this->assertTrue($success, $msg);
 
-    list($success, $msg) = $nodeObject->checkValues(self::$fields);
+    list($success, $msg) = $nodeObject->checkValues($this->fields);
     $this->assertTrue($success, $msg);
   }
 
@@ -181,12 +167,12 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
    * @depends testValueMultipleSubmission
    */
   public function testEmptySubmissionWithoutChange2() {
-    $testForm = new TestForm(self::$nid);
+    $testForm = new TestForm($this->nid);
 
     list($success, $nodeObject, $msg) = $testForm->submit();
     $this->assertTrue($success, $msg);
 
-    list($success, $msg) = $nodeObject->checkValues(self::$fields);
+    list($success, $msg) = $nodeObject->checkValues($this->fields);
     $this->assertTrue($success, $msg);
   }
 
@@ -196,17 +182,17 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
    * @depends testEmptySubmissionWithoutChange2
    */
   public function testValueZeroSubmission() {
-    $testForm = new TestForm(self::$nid);
+    $testForm = new TestForm($this->nid);
 
-    list($success, $values, $msg) = $testForm->{self::$fillFunctionName}(array("2", 0));
+    list($success, $values, $msg) = $testForm->{$this->fillFunctionName}(array(0));
     $this->assertTrue($success, $msg);
-    $this->assertEquals(array(2, 0), $values, "Values filled into " . self::$field_name . " are not correct.");
-    self::$fields[self::$field_name] = $values;
+    $this->assertEquals(0, $values, "Values filled into " . $this->field_name . " are not correct.");
+    $this->fields[$this->field_name] = $values;
 
     list($success, $nodeObject, $msg) = $testForm->submit();
     $this->assertTrue($success, $msg);
 
-    list($success, $msg) = $nodeObject->checkValues(self::$fields);
+    list($success, $msg) = $nodeObject->checkValues($this->fields);
     $this->assertTrue($success, $msg);
   }
 
@@ -216,17 +202,17 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
    * @depends testValueZeroSubmission
    */
   public function testEmptySubmission2() {
-    $testForm = new TestForm(self::$nid);
+    $testForm = new TestForm($this->nid);
 
-    list($success, $values, $msg) = $testForm->{self::$fillFunctionName}();
+    list($success, $values, $msg) = $testForm->{$this->fillFunctionName}();
     $this->assertTrue($success, $msg);
-    $this->assertEquals(array(), $values, "Values filled into " . self::$field_name . " are not correct.");
-    self::$fields[self::$field_name] = $values;
+    $this->assertEquals(array(), $values, "Values filled into " . $this->field_name . " are not correct.");
+    $this->fields[$this->field_name] = $values;
 
     list($success, $nodeObject, $msg) = $testForm->submit();
     $this->assertTrue($success, $msg);
 
-    list($success, $msg) = $nodeObject->checkValues(self::$fields);
+    list($success, $msg) = $nodeObject->checkValues($this->fields);
     $this->assertTrue($success, $msg);
   }
 
@@ -237,18 +223,21 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
    */
   public function testDefaltValues() {
     for ($i = 0; $i < 5; $i++) {
-      $testForm = new TestForm(self::$nid);
+      $testForm = new TestForm($this->nid);
 
-      list($success, $values, $msg) = $testForm->{self::$fillDefaultFunctionName}();
+      list($success, $values, $msg) = $testForm->{$this->fillDefaultFunctionName}();
       $this->assertTrue($success, $msg);
-      self::$fields[self::$field_name] = $values;
+      $this->fields[$this->field_name] = $values;
 
       list($success, $nodeObject, $msg) = $testForm->submit();
       $this->assertTrue($success, $msg);
 
-      list($success, $msg) = $nodeObject->checkValues(self::$fields);
+      list($success, $msg) = $nodeObject->checkValues($this->fields);
       $this->assertTrue($success, $msg);
     }
+
+    $this->userObject->logout();
+    Utils::deleteCreatedEntities();
   }
 
   /**
@@ -271,8 +260,6 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
   /**
    * Log out and delete the entities created in this test.
    */
-  public static function tearDownAfterClass() {
-    self::$userObject->logout();
-    Utils::deleteCreatedEntities();
-  }
+  /*public static function tearDownAfterClass() {
+  }*/
 }

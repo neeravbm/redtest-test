@@ -44,6 +44,11 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
   private static $fillFunctionName;
 
   /**
+   * @var string
+   */
+  private static $fillDefaultFunctionName;
+
+  /**
    * @var User
    */
   private static $userObject;
@@ -63,6 +68,10 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
    */
   public static function setupBeforeClass() {
     self::$fillFunctionName = 'fill' . Utils::makeTitleCase(
+        self::$field_name
+      ) . 'Values';
+
+    self::$fillDefaultFunctionName = 'fillDefault' . Utils::makeTitleCase(
         self::$field_name
       ) . 'Values';
 
@@ -224,6 +233,27 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
 
     list($success, $msg) = $nodeObject->checkValues(self::$fields);
     $this->assertTrue($success, $msg);
+  }
+
+  /**
+   * Edit the form and fill with default values.
+   *
+   * @depends testEmptySubmission2
+   */
+  public function testDefaltValues() {
+    for ($i = 0; $i < 5; $i++) {
+      $testForm = new TestForm(self::$nid);
+
+      list($success, $values, $msg) = $testForm->{self::$fillDefaultFunctionName}();
+      $this->assertTrue($success, $msg);
+      self::$fields[self::$field_name] = $values;
+
+      list($success, $nodeObject, $msg) = $testForm->submit();
+      $this->assertTrue($success, $msg);
+
+      list($success, $msg) = $nodeObject->checkValues(self::$fields);
+      $this->assertTrue($success, $msg);
+    }
   }
 
   /**

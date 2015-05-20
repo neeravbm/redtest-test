@@ -43,6 +43,11 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
   private static $fillFunctionName;
 
   /**
+   * @var string
+   */
+  private static $fillDefaultFunctionName;
+
+  /**
    * @var User
    */
   private static $userObject;
@@ -62,6 +67,10 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
    */
   public static function setupBeforeClass() {
     self::$fillFunctionName = 'fill' . Utils::makeTitleCase(
+        self::$field_name
+      ) . 'Values';
+
+    self::$fillDefaultFunctionName = 'fillDefault' . Utils::makeTitleCase(
         self::$field_name
       ) . 'Values';
 
@@ -149,11 +158,25 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
     $testForm = new TestForm(self::$nid);
 
     list($success, $values, $msg) = $testForm->{self::$fillFunctionName}(
-      array(0.56, -9.67, 2.3)
+      array(
+        "http://redcrackle.com",
+        array('url' => 'http://www.google.com'),
+        array(
+          'title' => 'Times of India',
+          'url' => 'http://timesofindia.indiatimes.com'
+        )
+      )
     );
     $this->assertTrue($success, $msg);
     $this->assertEquals(
-      array(0.56, -9.67, 2.3),
+      array(
+        "http://redcrackle.com",
+        'http://www.google.com',
+        array(
+          'title' => 'Times of India',
+          'url' => 'http://timesofindia.indiatimes.com'
+        )
+      ),
       $values,
       "Values filled into " . self::$field_name . " are not correct."
     );
@@ -189,10 +212,16 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
   public function testValueZeroSubmission() {
     $testForm = new TestForm(self::$nid);
 
-    list($success, $values, $msg) = $testForm->{self::$fillFunctionName}(array(2, 0));
+    list($success, $values, $msg) = $testForm->{self::$fillFunctionName}(
+      array(2, 0)
+    );
     $this->assertTrue($success, $msg);
-    $this->assertEquals(array(2, 0), $values, "Values filled into " . self::$field_name . " are not correct.");
-    self::$fields[self::$field_name] = $values;
+    $this->assertEquals(
+      array(2, 0),
+      $values,
+      "Values filled into " . self::$field_name . " are not correct."
+    );
+    self::$fields[self::$field_name] = 2;
 
     list($success, $nodeObject, $msg) = $testForm->submit();
     $this->assertTrue($success, $msg);
@@ -211,7 +240,11 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
 
     list($success, $values, $msg) = $testForm->{self::$fillFunctionName}();
     $this->assertTrue($success, $msg);
-    $this->assertEquals(array(), $values, "Values filled into " . self::$field_name . " are not correct.");
+    $this->assertEquals(
+      array(),
+      $values,
+      "Values filled into " . self::$field_name . " are not correct."
+    );
     self::$fields[self::$field_name] = $values;
 
     list($success, $nodeObject, $msg) = $testForm->submit();
@@ -219,6 +252,27 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
 
     list($success, $msg) = $nodeObject->checkValues(self::$fields);
     $this->assertTrue($success, $msg);
+  }
+
+  /**
+   * Edit the form and fill with default values.
+   *
+   * @depends testEmptySubmission2
+   */
+  public function testDefaltValues() {
+    for ($i = 0; $i < 5; $i++) {
+      $testForm = new TestForm(self::$nid);
+
+      list($success, $values, $msg) = $testForm->{self::$fillDefaultFunctionName}();
+      $this->assertTrue($success, $msg);
+      self::$fields[self::$field_name] = $values;
+
+      list($success, $nodeObject, $msg) = $testForm->submit();
+      $this->assertTrue($success, $msg);
+
+      list($success, $msg) = $nodeObject->checkValues(self::$fields);
+      $this->assertTrue($success, $msg);
+    }
   }
 
   /**

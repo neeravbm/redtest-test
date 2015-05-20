@@ -31,7 +31,7 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
   /**
    * @var array
    */
-  protected $backupGlobalsBlacklist = array('user', 'entities');
+  protected $backupGlobalsBlacklist = array('user', 'entities', 'language', 'language_url', 'language_content');
 
   /**
    * @var string
@@ -42,6 +42,11 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
    * @var string
    */
   private static $fillFunctionName;
+
+  /**
+   * @var string
+   */
+  private static $fillDefaultFunctionName;
 
   /**
    * @var User
@@ -65,6 +70,12 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
     self::$fillFunctionName = 'fill' . Utils::makeTitleCase(
         self::$field_name
       ) . 'Values';
+
+    self::$fillDefaultFunctionName = 'fillDefault' . Utils::makeTitleCase(
+        self::$field_name
+      ) . 'Values';
+
+    Utils::deleteCreatedEntities();
 
     list($success, $userObject, $msg) = User::createDefault();
     self::assertTrue($success, $msg);
@@ -220,6 +231,27 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
 
     list($success, $msg) = $nodeObject->checkValues(self::$fields);
     $this->assertTrue($success, $msg);
+  }
+
+  /**
+   * Edit the form and fill with default values.
+   *
+   * @depends testEmptySubmission2
+   */
+  public function testDefaltValues() {
+    for ($i = 0; $i < 5; $i++) {
+      $testForm = new TestForm(self::$nid);
+
+      list($success, $values, $msg) = $testForm->{self::$fillDefaultFunctionName}();
+      $this->assertTrue($success, $msg);
+      self::$fields[self::$field_name] = $values;
+
+      list($success, $nodeObject, $msg) = $testForm->submit();
+      $this->assertTrue($success, $msg);
+
+      list($success, $msg) = $nodeObject->checkValues(self::$fields);
+      $this->assertTrue($success, $msg);
+    }
   }
 
   /**
