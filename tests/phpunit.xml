@@ -19,6 +19,7 @@
         <testsuite name="ParaTest Fixtures">
             <directory>./RedTest/tests/test/crud</directory>
             <directory>./RedTest/tests/redtest_form</directory>
+            <directory>./RedTest/tests/views</directory>
             <!-- <directory>./RedTest/tests/test2</directory> -->
         </testsuite>
     </testsuites>

@@ -12,6 +12,14 @@ use RedTest\core\entities\User;
 use RedTest\core\Utils;
 use RedTest\forms\entities\Node\TestForm;
 
+/**
+ * Drupal root directory.
+ */
+define('DRUPAL_ROOT', getcwd());
+require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
+drupal_override_server_variables(array('SERVER_SOFTWARE' => 'RedTest'));
+drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
+
 class AuthenticatedUser extends \PHPUnit_Framework_TestCase {
 
   /**
@@ -20,51 +28,66 @@ class AuthenticatedUser extends \PHPUnit_Framework_TestCase {
   protected $backupGlobalsBlacklist = array('user', 'entities', 'language', 'language_url', 'language_content');
 
   /**
-   * @var string
+   * @var object
    */
-  protected $field_name;
+  protected static $transaction;
 
   /**
    * @var string
    */
-  protected $fillFunctionName;
+  protected static $field_name;
 
   /**
    * @var string
    */
-  protected $fillDefaultFunctionName;
+  protected static $fillFunctionName;
+
+  /**
+   * @var string
+   */
+  protected static $fillDefaultFunctionName;
 
   /**
    * @var User
    */
-  protected $userObject;
+  protected static $userObject;
 
   /**
    * @var int
    */
-  protected $nid;
+  protected static $nid;
 
   /**
    * @var array
    */
-  protected $fields;
+  protected static $fields;
 
-  public function __construct($field_name) {
-    $this->field_name = $field_name;
-    $this->fillFunctionName = 'fill' . Utils::makeTitleCase($this->field_name) . 'Values';
-    $this->fillDefaultFunctionName = 'fill' . Utils::makeTitleCase($this->field_name) . 'Values';
+  protected static $expectedValueEmpty = array();
+
+  protected static $valueOne = 1;
+
+  protected static $expectedValueOne = 1;
+
+  protected static $valueMultiple = array(1, 0);
+
+  protected static $expectedValueMultiple = array(1, 0);
+
+  protected static $valueZero = array(0);
+
+  protected static $expectedValueZero = 0;
+
+  public static function setUpBeforeClass() {
+    static::$fillFunctionName = 'fill' . Utils::makeTitleCase(static::$field_name) . 'Values';
+    static::$fillDefaultFunctionName = 'fill' . Utils::makeTitleCase(static::$field_name) . 'Values';
+
+    //static::$transaction = db_transaction();
 
     list($success, $userObject, $msg) = User::createDefault();
+    static::assertTrue($success, $msg);
+
+    list($success, self::$userObject, $msg) = User::loginProgrammatically($userObject->getId());
     self::assertTrue($success, $msg);
-
-    $this->userObject = User::loginProgrammatically($userObject->getId());
   }
-
-  /**
-   * Create an authenticated user and log in.
-   */
-  /*public static function setupBeforeClass() {
-  }*/
 
   /**
    * Submit a new test form.
@@ -72,28 +95,28 @@ class AuthenticatedUser extends \PHPUnit_Framework_TestCase {
   public function testEmptySubmission() {
     $testForm = new TestForm();
 
-    $this->fields = $this->getEmptyFieldValues();
+    static::$fields = $this->getEmptyFieldValues();
 
     list($success, $values, $msg) = $testForm->fillDefaultTitleValues();
     $this->assertTrue($success, $msg);
-    $this->fields['title'] = $values;
+    static::$fields['title'] = $values;
 
-    list($success, $values, $msg) = $testForm->{$this->fillFunctionName}();
+    list($success, $values, $msg) = $testForm->{static::$fillFunctionName}();
     $this->assertTrue($success, $msg);
     $this->assertEquals(
-      array(),
+      static::$expectedValueEmpty,
       $values,
-      "Values filled into " . $this->field_name . " are not correct."
+      "Values filled into " . static::$field_name . " are not correct."
     );
-    $this->fields[$this->field_name] = $values;
+    static::$fields[static::$field_name] = $values;
 
     list($success, $nodeObject, $msg) = $testForm->submit();
     $this->assertTrue($success, $msg);
 
-    list($success, $msg) = $nodeObject->checkValues($this->fields);
+    list($success, $msg) = $nodeObject->checkValues(static::$fields);
     $this->assertTrue($success, $msg);
 
-    $this->nid = $nodeObject->getId();
+    static::$nid = $nodeObject->getId();
   }
 
   /**
@@ -102,12 +125,12 @@ class AuthenticatedUser extends \PHPUnit_Framework_TestCase {
    * @depends testEmptySubmission
    */
   public function testEmptySubmissionWithoutChange() {
-    $testForm = new TestForm($this->nid);
+    $testForm = new TestForm(static::$nid);
 
     list($success, $nodeObject, $msg) = $testForm->submit();
     $this->assertTrue($success, $msg);
 
-    list($success, $msg) = $nodeObject->checkValues($this->fields);
+    list($success, $msg) = $nodeObject->checkValues(static::$fields);
     $this->assertTrue($success, $msg);
   }
 
@@ -117,21 +140,21 @@ class AuthenticatedUser extends \PHPUnit_Framework_TestCase {
    * @depends testEmptySubmissionWithoutChange
    */
   public function testValueOneSubmission() {
-    $testForm = new TestForm($this->nid);
+    $testForm = new TestForm(static::$nid);
 
-    list($success, $values, $msg) = $testForm->{$this->fillFunctionName}(1);
+    list($success, $values, $msg) = $testForm->{static::$fillFunctionName}(static::$valueOne);
     $this->assertTrue($success, $msg);
     $this->assertEquals(
-      1,
+      static::$expectedValueOne,
       $values,
-      "Values filled into " . $this->field_name . " are not correct."
+      "Values filled into " . static::$field_name . " are not correct."
     );
-    $this->fields[$this->field_name] = $values;
+    static::$fields[static::$field_name] = $values;
 
     list($success, $nodeObject, $msg) = $testForm->submit();
     $this->assertTrue($success, $msg);
 
-    list($success, $msg) = $nodeObject->checkValues($this->fields);
+    list($success, $msg) = $nodeObject->checkValues(static::$fields);
     $this->assertTrue($success, $msg);
   }
 
@@ -141,23 +164,21 @@ class AuthenticatedUser extends \PHPUnit_Framework_TestCase {
    * @depends testValueOneSubmission
    */
   public function testValueMultipleSubmission() {
-    $testForm = new TestForm($this->nid);
+    $testForm = new TestForm(static::$nid);
 
-    list($success, $values, $msg) = $testForm->{$this->fillFunctionName}(
-      array(1, 0)
-    );
+    list($success, $values, $msg) = $testForm->{static::$fillFunctionName}(static::$valueMultiple);
     $this->assertTrue($success, $msg);
     $this->assertEquals(
-      array(1, 0),
+      static::$expectedValueMultiple,
       $values,
-      "Values filled into " . $this->field_name . " are not correct."
+      "Values filled into " . static::$field_name . " are not correct."
     );
-    $this->fields[$this->field_name] = $values;
+    static::$fields[static::$field_name] = $values;
 
     list($success, $nodeObject, $msg) = $testForm->submit();
     $this->assertTrue($success, $msg);
 
-    list($success, $msg) = $nodeObject->checkValues($this->fields);
+    list($success, $msg) = $nodeObject->checkValues(static::$fields);
     $this->assertTrue($success, $msg);
   }
 
@@ -167,12 +188,12 @@ class AuthenticatedUser extends \PHPUnit_Framework_TestCase {
    * @depends testValueMultipleSubmission
    */
   public function testEmptySubmissionWithoutChange2() {
-    $testForm = new TestForm($this->nid);
+    $testForm = new TestForm(static::$nid);
 
     list($success, $nodeObject, $msg) = $testForm->submit();
     $this->assertTrue($success, $msg);
 
-    list($success, $msg) = $nodeObject->checkValues($this->fields);
+    list($success, $msg) = $nodeObject->checkValues(static::$fields);
     $this->assertTrue($success, $msg);
   }
 
@@ -182,17 +203,17 @@ class AuthenticatedUser extends \PHPUnit_Framework_TestCase {
    * @depends testEmptySubmissionWithoutChange2
    */
   public function testValueZeroSubmission() {
-    $testForm = new TestForm($this->nid);
+    $testForm = new TestForm(static::$nid);
 
-    list($success, $values, $msg) = $testForm->{$this->fillFunctionName}(array(0));
+    list($success, $values, $msg) = $testForm->{static::$fillFunctionName}(static::$valueZero);
     $this->assertTrue($success, $msg);
-    $this->assertEquals(0, $values, "Values filled into " . $this->field_name . " are not correct.");
-    $this->fields[$this->field_name] = $values;
+    //$this->assertEquals(static::$expectedValueZero, $values, "Values filled into " . static::$field_name . " are not correct.");
+    static::$fields[static::$field_name] = static::$expectedValueZero;
 
     list($success, $nodeObject, $msg) = $testForm->submit();
     $this->assertTrue($success, $msg);
 
-    list($success, $msg) = $nodeObject->checkValues($this->fields);
+    list($success, $msg) = $nodeObject->checkValues(static::$fields);
     $this->assertTrue($success, $msg);
   }
 
@@ -202,17 +223,17 @@ class AuthenticatedUser extends \PHPUnit_Framework_TestCase {
    * @depends testValueZeroSubmission
    */
   public function testEmptySubmission2() {
-    $testForm = new TestForm($this->nid);
+    $testForm = new TestForm(static::$nid);
 
-    list($success, $values, $msg) = $testForm->{$this->fillFunctionName}();
+    list($success, $values, $msg) = $testForm->{static::$fillFunctionName}();
     $this->assertTrue($success, $msg);
-    $this->assertEquals(array(), $values, "Values filled into " . $this->field_name . " are not correct.");
-    $this->fields[$this->field_name] = $values;
+    $this->assertEquals(static::$expectedValueEmpty, $values, "Values filled into " . static::$field_name . " are not correct.");
+    static::$fields[static::$field_name] = $values;
 
     list($success, $nodeObject, $msg) = $testForm->submit();
     $this->assertTrue($success, $msg);
 
-    list($success, $msg) = $nodeObject->checkValues($this->fields);
+    list($success, $msg) = $nodeObject->checkValues(static::$fields);
     $this->assertTrue($success, $msg);
   }
 
@@ -223,21 +244,18 @@ class AuthenticatedUser extends \PHPUnit_Framework_TestCase {
    */
   public function testDefaltValues() {
     for ($i = 0; $i < 5; $i++) {
-      $testForm = new TestForm($this->nid);
+      $testForm = new TestForm(static::$nid);
 
-      list($success, $values, $msg) = $testForm->{$this->fillDefaultFunctionName}();
+      list($success, $values, $msg) = $testForm->{static::$fillDefaultFunctionName}();
       $this->assertTrue($success, $msg);
-      $this->fields[$this->field_name] = $values;
+      static::$fields[static::$field_name] = $values;
 
       list($success, $nodeObject, $msg) = $testForm->submit();
       $this->assertTrue($success, $msg);
 
-      list($success, $msg) = $nodeObject->checkValues($this->fields);
+      list($success, $msg) = $nodeObject->checkValues(static::$fields);
       $this->assertTrue($success, $msg);
     }
-
-    $this->userObject->logout();
-    Utils::deleteCreatedEntities();
   }
 
   /**
@@ -260,6 +278,10 @@ class AuthenticatedUser extends \PHPUnit_Framework_TestCase {
   /**
    * Log out and delete the entities created in this test.
    */
-  /*public static function tearDownAfterClass() {
-  }*/
+  public static function tearDownAfterClass() {
+    static::$userObject->logout();
+    Utils::deleteCreatedEntities();
+
+    //static::$transaction->rollback();
+  }
 }

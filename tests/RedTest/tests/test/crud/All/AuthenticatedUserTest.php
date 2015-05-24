@@ -20,7 +20,7 @@ use RedTest\core\View;
  */
 define('DRUPAL_ROOT', getcwd());
 require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
-drupal_override_server_variables();
+drupal_override_server_variables(array('SERVER_SOFTWARE' => 'RedTest'));
 drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 
 class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
@@ -36,7 +36,8 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
     list($success, $userObject, $msg) = User::createDefault();
     self::assertTrue($success, $msg);
 
-    self::$userObject = User::loginProgrammatically($userObject->getId());
+    list($success, self::$userObject, $msg) = User::loginProgrammatically($userObject->getId());
+    self::assertTrue($success, $msg);
   }
 
   //public function testCreation() {
@@ -142,7 +143,7 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
 
     //$skip = array('field_file_single_1', 'field_file_single_2', 'field_file_multi_1', 'field_file_multi_2', 'field_image_single_1', 'field_image_single_2', 'field_image_multi_1', 'field_image_multi_2');
     $skip = array();
-    list($success, $fields, $msg) = $testForm->fillDefaultValues($skip);
+    list($success, $fields, $msg) = $testForm->fillDefaultValues(TRUE, $skip);
     $this->assertTrue($success, $msg);
 
     list($success, $nodeObject, $msg) = $testForm->submit();
@@ -161,7 +162,7 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
 
     $testForm = new TestForm($nodeObject->getId());
 
-    list($success, $fields, $msg) = $testForm->fillDefaultValues($skip);
+    list($success, $fields, $msg) = $testForm->fillDefaultValues(TRUE, $skip);
     $this->assertTrue($success, $msg);
 
     list($success, $nodeObject, $msg) = $testForm->submit();
@@ -203,6 +204,6 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
 
   public static function tearDownAfterClass() {
     self::$userObject->logout();
-    //Utils::deleteCreatedEntities();
+    Utils::deleteCreatedEntities();
   }
 }

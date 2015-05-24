@@ -46,7 +46,8 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
     list($success, $userObject, $msg) = User::createDefault();
     self::assertTrue($success, $msg);
 
-    self::$userObject = User::loginProgrammatically($userObject->getId());
+    list($success, self::$userObject, $msg) = User::loginProgrammatically($userObject->getId());
+    self::assertTrue($success, $msg);
   }
 
   /**
