@@ -25,7 +25,10 @@ drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 
 class AuthenticatedUser4Test extends \PHPUnit_Framework_TestCase {
 
-  protected $backupGlobalsBlacklist = array('user', 'entities');
+  /**
+   * @var array
+   */
+  protected $backupGlobalsBlacklist = array('user', 'entities', 'language', 'language_url', 'language_content');
 
   /**
    * @var User
@@ -40,100 +43,6 @@ class AuthenticatedUser4Test extends \PHPUnit_Framework_TestCase {
     self::assertTrue($success, $msg);
   }
 
-  //public function testCreation() {
-    /**
-     * @var Test $testObject
-     */
-    /*list($success, $testObject, $msg) = Test::createDefault();
-    $this->assertTrue(
-      $success,
-      "Authenticated user is not able to create a Test node: " . $msg
-    );*/
-
-    /*$testForm = new TestForm();
-
-    list($success, $fields, $msg) = $testForm->fillDefaultValues(
-      array('field_long_text_summary_1')
-    );
-    $this->assertTrue(
-      $success,
-      "Authenticated user is not able to fill default fields: " . $msg
-    );
-
-    list($success, $fields, $msg) = $testForm->fillDefaultFieldLongTextSummary1Values(
-    );
-
-    list($success, $values, $msg) = $testForm->fillDefaultFieldValues(
-      'field_long_text_summary_1'
-    );
-
-    list($success, $values, $msg) = Field::fillDefaultValues(
-      $testForm,
-      'field_long_text_summary_1'
-    );
-
-    list($success, $values, $msg) = Text::fillDefaultValues(
-      $testForm,
-      'field_long_text_summary_1'
-    );
-
-    list($success, $values, $msg) = Text::fillDefaultTextTextAreaWithSummaryValues(
-      $testForm,
-      'field_long_text_summary_1'
-    );
-
-    $values = array(
-      array(
-        'value' => Utils::getRandomText(100),
-        'summary' => Utils::getRandomText(25),
-        'format' => 'php_code',
-      )
-    );
-
-    list($success, $msg) = $testForm->fillDefaultFieldLongTextSummary1($values);
-    $this->assertTrue(
-      $success,
-      "Authenticated user is not able to fill Body field: " . $msg
-    );
-
-    list($success, $values, $msg) = $testForm->fillFieldValues(
-      'field_long_text_summary_1',
-      $values
-    );
-
-    list($success, $values, $msg) = Text::fillValues(
-      $testForm,
-      'field_long_text_summary_1',
-      $values
-    );
-
-    $values = array(
-      array(
-        'value' => Utils::getRandomText(100),
-        'summary' => Utils::getRandomText(25),
-        'format' => 'filtered_html',
-      )
-    );
-    list($success, $values, $msg) = Text::fillTextTextAreaWithSummaryValues(
-      $testForm,
-      'field_long_text_summary_1',
-      $values
-    );
-
-    $this->assertTrue(
-      $success,
-      "Authenticated user is not able to fill Body field: " . $msg
-    );
-
-    list($success, $testObject, $errors) = $testForm->submit();
-    $this->assertTrue(
-      $success,
-      "Authenticated user is not able to create a Test node:" . Utils::convertErrorArrayToString(
-        $errors
-      )
-    );
-  }*/
-
   public function testAllDefault() {
     $this->assertEquals('node_add', Menu::getPageCallback('node/add/test'), "Page callback to add a Test node is incorrect.");
 
@@ -141,7 +50,7 @@ class AuthenticatedUser4Test extends \PHPUnit_Framework_TestCase {
 
     $testForm = new TestForm();
 
-    list($success, $fields, $msg) = $testForm->fillDefaultValues(TRUE);
+    list($success, $fields, $msg) = $testForm->fillDefaultValues(array(), array('required_fields_only' => FALSE));
     $this->assertTrue($success, $msg);
 
     list($success, $nodeObject, $msg) = $testForm->submit();
@@ -160,7 +69,7 @@ class AuthenticatedUser4Test extends \PHPUnit_Framework_TestCase {
 
     $testForm = new TestForm($nodeObject->getId());
 
-    list($success, $fields, $msg) = $testForm->fillDefaultValues(TRUE);
+    list($success, $fields, $msg) = $testForm->fillDefaultValues(array(), array('required_fields_only' => FALSE));
     $this->assertTrue($success, $msg);
 
     list($success, $nodeObject, $msg) = $testForm->submit();

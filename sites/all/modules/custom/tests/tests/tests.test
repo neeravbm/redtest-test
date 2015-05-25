@@ -24,7 +24,7 @@ class Test2TestCase extends SiteTestCase {
     $account->pass_raw = "1234";*/
     $this->drupalLogin($account);
 
-    for ($i = 0; $i < 100; $i++) {
+    for ($i = 0; $i < 1; $i++) {
       $edit = array(
         'title' => $this->randomName(20),
         'body[und][0][value]' => $this->randomName(100),

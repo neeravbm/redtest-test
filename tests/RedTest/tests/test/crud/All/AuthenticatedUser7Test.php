@@ -23,7 +23,7 @@ require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
 drupal_override_server_variables(array('SERVER_SOFTWARE' => 'RedTest'));
 drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 
-class AuthenticatedUser3Test extends \PHPUnit_Framework_TestCase {
+class AuthenticatedUser7Test extends \PHPUnit_Framework_TestCase {
 
   /**
    * @var array
@@ -50,7 +50,9 @@ class AuthenticatedUser3Test extends \PHPUnit_Framework_TestCase {
 
     $testForm = new TestForm();
 
-    list($success, $fields, $msg) = $testForm->fillDefaultValues(array(), array('required_fields_only' => FALSE));
+    //$skip = array('field_file_single_1', 'field_file_single_2', 'field_file_multi_1', 'field_file_multi_2', 'field_image_single_1', 'field_image_single_2', 'field_image_multi_1', 'field_image_multi_2');
+    $skip = array();
+    list($success, $fields, $msg) = $testForm->fillDefaultValues($skip, array('required_fields_only' => FALSE));
     $this->assertTrue($success, $msg);
 
     list($success, $nodeObject, $msg) = $testForm->submit();
@@ -69,7 +71,7 @@ class AuthenticatedUser3Test extends \PHPUnit_Framework_TestCase {
 
     $testForm = new TestForm($nodeObject->getId());
 
-    list($success, $fields, $msg) = $testForm->fillDefaultValues(array(), array('required_fields_only' => FALSE));
+    list($success, $fields, $msg) = $testForm->fillDefaultValues($skip, array('required_fields_only' => FALSE));
     $this->assertTrue($success, $msg);
 
     list($success, $nodeObject, $msg) = $testForm->submit();

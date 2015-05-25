@@ -41,25 +41,42 @@ class ListOfTestNodesTest extends \PHPUnit_Framework_TestCase {
     $userObject->logout();
   }
 
+  /*public function testSuperUser() {
+    list($success, $userObject, $msg) = User::loginProgrammatically(1);
+    $this->assertTrue($success, $msg);
+
+    $view = new View('list_of_test_nodes');
+
+    $this->assertTrue($view->hasAccess(), "Superuser does not have access to List of Test Nodes view.");
+
+    $this->assertEquals('list-of-test-nodes/*', $view->getUrl(), "URL of List of Test Nodes is not correct.");
+
+    $results = $view->execute(array(807), array('type' => array('page', 'test')));
+    $this->assertTrue($view->hasValues(array(array('nid' => 142, 'node_title' => 'Trial by Author'), array('nid' => 144)), FALSE, TRUE), "View values do not match.");
+
+    $userObject->logout();
+  }*/
+
+  /**
+   * Test the view as an authenticated user.
+   */
   public function testAuthenticatedUser() {
+    // Log the user out if he is logged in.
+    User::logout();
+
     list($success, $userObject, $msg) = User::createDefault();
     $this->assertTrue($success, $msg);
 
     list($success, $userObject, $msg) = User::loginProgrammatically($userObject->getId());
     $this->assertTrue($success, $msg);
 
-    /*Utils::sort(self::$testObjects, "nid DESC");
+    //Utils::sort(self::$testObjects, "nid DESC");
 
     $view = new View('list_of_test_nodes');
-    //print_r($view->getUrl());
-    print_r($view->hasAccess());
-    $results = $view->execute(array(807), array('type' => array('page', 'test')));
-    //print_r($view->getUrl());
-    print_r($results);
-    $this->assertTrue($view->hasValues(array(array('nid' => 142, 'node_title' => 'Trial by Author'), array('nid' => 144)), FALSE, TRUE), "View values do not match.");
-    //print_r($view->hasAccess());
-    $userObject->logout();*/
 
+    $this->assertFalse($view->hasAccess(), "Authenticated user has access to List of Test Nodes view.");
+
+    $userObject->logout();
   }
 
   public static function tearDownAfterClass() {

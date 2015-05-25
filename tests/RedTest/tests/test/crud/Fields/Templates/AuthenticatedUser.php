@@ -87,12 +87,28 @@ class AuthenticatedUser extends \PHPUnit_Framework_TestCase {
 
     list($success, self::$userObject, $msg) = User::loginProgrammatically($userObject->getId());
     self::assertTrue($success, $msg);
+
+    self::$userObject->logout();
   }
 
   /**
    * Submit a new test form.
    */
   public function testEmptySubmission() {
+    list($success, self::$userObject, $msg) = User::loginProgrammatically(1);
+    self::assertTrue($success, $msg);
+    self::$userObject->logout();
+
+    list($success, self::$userObject, $msg) = User::loginProgrammatically(1);
+    $this->assertTrue($success, $msg);
+    self::$userObject->logout();
+
+    list($success, $userObject, $msg) = User::createDefault();
+    static::assertTrue($success, $msg);
+
+    list($success, self::$userObject, $msg) = User::loginProgrammatically($userObject->getId());
+    self::assertTrue($success, $msg);
+
     $testForm = new TestForm();
 
     static::$fields = $this->getEmptyFieldValues();
