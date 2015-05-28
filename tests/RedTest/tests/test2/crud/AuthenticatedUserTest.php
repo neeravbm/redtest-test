@@ -10,24 +10,32 @@ namespace tests\RedTest\tests\test2\crud;
 
 use RedTest\core\entities\User;
 use RedTest\core\Utils;
-use RedTest\entities\Node\Test;
 use RedTest\entities\Node\Test2;
+use RedTest\entities\TaxonomyTerm\Tags;
 use RedTest\forms\entities\Node\Test2Form;
-use RedTest\forms\entities\Node\TestForm;
 use RedTest\core\Menu;
-use RedTest\core\View;
 
 /**
  * Drupal root directory.
  */
-define('DRUPAL_ROOT', getcwd());
+if (!defined('DRUPAL_ROOT')) {
+  define('DRUPAL_ROOT', getcwd());
+}
 require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
-drupal_override_server_variables();
+if (empty($_SERVER['SERVER_SOFTWARE'])) {
+  drupal_override_server_variables(array('SERVER_SOFTWARE' => 'RedTest'));
+}
 drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 
 class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
 
-  protected $backupGlobalsBlacklist = array('user', 'entities');
+  protected $backupGlobalsBlacklist = array(
+    'user',
+    'entities',
+    'language',
+    'language_url',
+    'language_content'
+  );
 
   /**
    * @var User
@@ -38,7 +46,9 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
     list($success, $userObject, $msg) = User::createDefault();
     self::assertTrue($success, $msg);
 
-    list($success, self::$userObject, $msg) = User::loginProgrammatically($userObject->getId());
+    list($success, self::$userObject, $msg) = User::loginProgrammatically(
+      $userObject->getId()
+    );
     self::assertTrue($success, $msg);
   }
 
@@ -54,29 +64,19 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
       "Authenticated user does not have access to create a Test 2 node."
     );
 
-    /*for ($i = 0; $i < 100; $i++) {
-      $testForm = new Test2Form();
-
-      list($success, $fields, $msg) = $testForm->fillDefaultValues();
-      $this->assertTrue($success, $msg);
-
-      list($success, $nodeObject, $msg) = $testForm->submit();
-      $this->assertTrue($success, $msg);
-
-      list($success, $msg) = $nodeObject->checkValues($fields);
-      $this->assertTrue($success, $msg);
-    }*/
+    list($success, $tagsObjects, $msg) = Tags::createDefault(5);
+    $this->assertTrue($success, $msg);
 
     $testForm = new Test2Form();
 
-    $skip = array('field_textfield_multi_1', 'field_textfield_multi_2');
-    list($success, $fields, $msg) = $testForm->fillDefaultValues($skip);
+    $options = array(
+      'required_fields_only' => FALSE,
+      'references' => array(
+        'taxonomy_terms' => $tagsObjects,
+      ),
+    );
+    list($success, $fields, $msg) = $testForm->fillDefaultValues($options);
     $this->assertTrue($success, $msg);
-
-    list($success, $values, $msg) = $testForm->fillFieldTextfieldMulti1Values(array('a', 'b', 'c', 'd', 'e'));
-    $this->assertTrue($success, $msg);
-
-    $fields['field_textfield_multi_1'] = $values;
 
     list($success, $nodeObject, $msg) = $testForm->submit();
     $this->assertTrue($success, $msg);
@@ -94,13 +94,8 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
 
     $testForm = new Test2Form($nodeObject->getId());
 
-    list($success, $fields, $msg) = $testForm->fillDefaultValues($skip);
+    list($success, $fields, $msg) = $testForm->fillDefaultValues($options);
     $this->assertTrue($success, $msg);
-
-    list($success, $values, $msg) = $testForm->fillFieldTextfieldMulti1Values(array('a', 'b', 'c'));
-    $this->assertTrue($success, $msg);
-
-    $fields['field_textfield_multi_1'] = $values;
 
     list($success, $nodeObject, $msg) = $testForm->submit();
     $this->assertTrue($success, $msg);
@@ -116,6 +111,6 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
 
   public static function tearDownAfterClass() {
     self::$userObject->logout();
-    //Utils::deleteCreatedEntities();
+    Utils::deleteCreatedEntities();
   }
 }

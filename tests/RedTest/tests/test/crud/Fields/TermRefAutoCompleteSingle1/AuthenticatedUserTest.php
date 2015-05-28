@@ -3,95 +3,34 @@
  * Created by PhpStorm.
  * User: neeravm
  * Date: 5/20/15
- * Time: 9:15 AM
+ * Time: 9:34 AM
  */
 
-namespace RedTest\tests\test\crud\Fields\Templates;
+namespace RedTest\tests\test\crud\Fields\TermRefAutoCompleteSingle1;
 
-use RedTest\core\entities\User;
+
+use RedTest\core\entities\TaxonomyTerm;
+use RedTest\tests\test\crud\Fields\Templates\AuthenticatedUser;
 use RedTest\core\Utils;
 use RedTest\forms\entities\Node\TestForm;
 
-/**
- * Drupal root directory.
- */
-if (!defined('DRUPAL_ROOT')) {
-  define('DRUPAL_ROOT', getcwd());
-}
-require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
-if (empty($_SERVER['SERVER_SOFTWARE'])) {
-  drupal_override_server_variables(array('SERVER_SOFTWARE' => 'RedTest'));
-}
-drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
+class AuthenticatedUserTest extends AuthenticatedUser {
 
-class AuthenticatedUser extends \PHPUnit_Framework_TestCase {
+  protected static $field_name = 'field_term_ref_autocomp_single_1';
 
-  /**
-   * @var array
-   */
-  protected $backupGlobalsBlacklist = array('user', 'entities', 'language', 'language_url', 'language_content');
+  protected static $expectedValueEmpty = '';
 
-  /**
-   * @var object
-   */
-  protected static $transaction;
+  protected static $valueOne = 'term 1';
 
-  /**
-   * @var string
-   */
-  protected static $field_name;
+  protected static $expectedValueOne = 'term 1';
 
-  /**
-   * @var string
-   */
-  protected static $fillFunctionName;
+  protected static $valueMultiple = 'term 2';
 
-  /**
-   * @var string
-   */
-  protected static $fillDefaultFunctionName;
+  protected static $expectedValueMultiple = 'term 2';
 
-  /**
-   * @var User
-   */
-  protected static $userObject;
-
-  /**
-   * @var int
-   */
-  protected static $nid;
-
-  /**
-   * @var array
-   */
-  protected static $fields;
-
-  protected static $expectedValueEmpty = array();
-
-  protected static $valueOne = 1;
-
-  protected static $expectedValueOne = 1;
-
-  protected static $valueMultiple = array(1, 0);
-
-  protected static $expectedValueMultiple = array(1, 0);
-
-  protected static $valueZero = array(0);
+  protected static $valueZero = 0;
 
   protected static $expectedValueZero = 0;
-
-  public static function setUpBeforeClass() {
-    static::$fillFunctionName = 'fill' . Utils::makeTitleCase(static::$field_name) . 'Values';
-    static::$fillDefaultFunctionName = 'fill' . Utils::makeTitleCase(static::$field_name) . 'Values';
-
-    //static::$transaction = db_transaction();
-
-    list($success, $userObject, $msg) = User::createDefault();
-    static::assertTrue($success, $msg);
-
-    list($success, self::$userObject, $msg) = User::loginProgrammatically($userObject->getId());
-    self::assertTrue($success, $msg);
-  }
 
   /**
    * Submit a new test form.
@@ -146,6 +85,7 @@ class AuthenticatedUser extends \PHPUnit_Framework_TestCase {
   public function testValueOneSubmission() {
     $testForm = new TestForm(static::$nid);
 
+    static::$valueOne = static::$expectedValueOne = TaxonomyTerm::getUniqueName('tags');
     list($success, $values, $msg) = $testForm->{static::$fillFunctionName}(static::$valueOne);
     $this->assertTrue($success, $msg);
     $this->assertEquals(
@@ -170,6 +110,10 @@ class AuthenticatedUser extends \PHPUnit_Framework_TestCase {
   public function testValueMultipleSubmission() {
     $testForm = new TestForm(static::$nid);
 
+    static::$valueMultiple = array(
+      TaxonomyTerm::getUniqueName('tags'),
+    );
+    static::$expectedValueMultiple = static::$valueMultiple[0];
     list($success, $values, $msg) = $testForm->{static::$fillFunctionName}(static::$valueMultiple);
     $this->assertTrue($success, $msg);
     $this->assertEquals(
@@ -219,6 +163,10 @@ class AuthenticatedUser extends \PHPUnit_Framework_TestCase {
 
     list($success, $msg) = $nodeObject->checkValues(static::$fields);
     $this->assertTrue($success, $msg);
+
+    static::$fields[static::$field_name] = 'abc';
+    list($success, $msg) = $nodeObject->checkValues(static::$fields);
+    $this->assertFalse($success, $msg);
   }
 
   /**
@@ -263,29 +211,24 @@ class AuthenticatedUser extends \PHPUnit_Framework_TestCase {
   }
 
   /**
-   * Returns an associative array with field names as keys and empty values.
-   *
-   * @return array
-   *   Associative array with field names as keys.
-   */
-  protected static function getEmptyFieldValues() {
-    $instances = field_info_instances('node', 'test');
-    $fields = array();
-    foreach ($instances as $field_name => $value) {
-      $fields[$field_name] = '';
-    }
-    $fields['title'] = '';
-
-    return $fields;
-  }
-
-  /**
    * Log out and delete the entities created in this test.
    */
   public static function tearDownAfterClass() {
     static::$userObject->logout();
     Utils::deleteCreatedEntities();
 
-    //static::$transaction->rollback();
+    // This test also created taxonomy terms via autocomplete. Delete them as
+    // well.
+    $terms = taxonomy_get_term_by_name('term 1', 'tags');
+    $term = array_shift($terms);
+    taxonomy_term_delete($term->tid);
+
+    $terms = taxonomy_get_term_by_name('term 2', 'tags');
+    $term = array_shift($terms);
+    taxonomy_term_delete($term->tid);
+
+    $terms = taxonomy_get_term_by_name('term 3', 'tags');
+    $term = array_shift($terms);
+    taxonomy_term_delete($term->tid);
   }
 }

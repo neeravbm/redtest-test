@@ -16,10 +16,13 @@ use RedTest\core\View;
 /**
  * Drupal root directory.
  */
-define('DRUPAL_ROOT', getcwd());
+if (!defined('DRUPAL_ROOT')) {
+  define('DRUPAL_ROOT', getcwd());
+}
 require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
-drupal_override_server_variables(array('SERVER_SOFTWARE' => 'RedTest'));
-//drupal_override_server_variables();
+if (empty($_SERVER['SERVER_SOFTWARE'])) {
+  drupal_override_server_variables(array('SERVER_SOFTWARE' => 'RedTest'));
+}
 drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 
 

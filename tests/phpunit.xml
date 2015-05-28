@@ -17,11 +17,11 @@
          verbose="true">
     <testsuites>
         <testsuite name="ParaTest Fixtures">
-            <directory>./RedTest/tests/test/crud/All</directory>
-            <!-- <directory>./RedTest/tests/redtest_form</directory>
+            <directory>./RedTest/tests/test</directory>
+            <directory>./RedTest/tests/redtest_form</directory>
             <directory>./RedTest/tests/views</directory>
             <directory>./RedTest/tests/blocks</directory>
-            <directory>./RedTest/tests/test2</directory> -->
+            <!-- <directory>./RedTest/tests/test2</directory> -->
         </testsuite>
     </testsuites>
 </phpunit>

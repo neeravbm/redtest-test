@@ -54,8 +54,7 @@ class TalentContributorUserTest extends \PHPUnit_Framework_TestCase {
       'field_currency_type',
     );
     list($success, self::$purchasingContractObject, $msg) = PurchasingContract::createDefault(
-      1,
-      $skip
+      1
     );
     self::assertTrue($success, $msg);
 
