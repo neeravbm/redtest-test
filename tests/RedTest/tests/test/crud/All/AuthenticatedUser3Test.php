@@ -76,7 +76,9 @@ class AuthenticatedUser3Test extends \PHPUnit_Framework_TestCase {
     $options = array(
       'required_fields_only' => FALSE,
       'references' => array(
-        'taxonomy_terms' => $tagsObjects,
+        'taxonomy_terms' => array(
+          'tags' => $tagsObjects,
+        ),
       ),
     );
 

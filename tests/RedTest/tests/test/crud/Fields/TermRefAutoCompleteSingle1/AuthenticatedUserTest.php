@@ -216,19 +216,5 @@ class AuthenticatedUserTest extends AuthenticatedUser {
   public static function tearDownAfterClass() {
     static::$userObject->logout();
     Utils::deleteCreatedEntities();
-
-    // This test also created taxonomy terms via autocomplete. Delete them as
-    // well.
-    $terms = taxonomy_get_term_by_name('term 1', 'tags');
-    $term = array_shift($terms);
-    taxonomy_term_delete($term->tid);
-
-    $terms = taxonomy_get_term_by_name('term 2', 'tags');
-    $term = array_shift($terms);
-    taxonomy_term_delete($term->tid);
-
-    $terms = taxonomy_get_term_by_name('term 3', 'tags');
-    $term = array_shift($terms);
-    taxonomy_term_delete($term->tid);
   }
 }

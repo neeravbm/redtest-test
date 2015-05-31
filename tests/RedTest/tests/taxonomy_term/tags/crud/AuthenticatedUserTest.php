@@ -54,9 +54,9 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
     list($success, $userObject, $msg) = User::createDefault();
     self::assertTrue($success, $msg);
 
-    list($success, self::$userObject, $msg) = User::loginProgrammatically(
-      $userObject->getId()
-    );
+    User::logout();
+
+    list($success, self::$userObject, $msg) = User::login($userObject->getNameValues(), $userObject->getPasswordValues());
     self::assertTrue($success, $msg);
   }
 
@@ -94,9 +94,10 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
 
     $superuserObject->logout();
 
-    list($success, self::$userObject, $msg) = User::loginProgrammatically(
+    list($success, self::$userObject, $msg) = User::login(self::$userObject->getNameValues(), self::$userObject->getPasswordValues());
+    /*list($success, self::$userObject, $msg) = User::loginProgrammatically(
       self::$userObject->getId()
-    );
+    );*/
     $this->assertTrue($success, $msg);
 
     $tid = $tagsObject->getId();
