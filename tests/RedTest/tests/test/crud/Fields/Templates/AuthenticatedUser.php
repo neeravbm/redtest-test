@@ -9,27 +9,17 @@
 namespace RedTest\tests\test\crud\Fields\Templates;
 
 use RedTest\core\entities\User;
+use RedTest\core\RedTest_Framework_TestCase;
 use RedTest\core\Utils;
 use RedTest\forms\entities\Node\TestForm;
 
+
 /**
- * Drupal root directory.
+ * Class AuthenticatedUser
+ *
+ * @package RedTest\tests\test\crud\Fields\Templates
  */
-if (!defined('DRUPAL_ROOT')) {
-  define('DRUPAL_ROOT', getcwd());
-}
-require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
-if (empty($_SERVER['SERVER_SOFTWARE'])) {
-  drupal_override_server_variables(array('SERVER_SOFTWARE' => 'RedTest'));
-}
-drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
-
-class AuthenticatedUser extends \PHPUnit_Framework_TestCase {
-
-  /**
-   * @var array
-   */
-  protected $backupGlobalsBlacklist = array('user', 'entities', 'language', 'language_url', 'language_content');
+class AuthenticatedUser extends RedTest_Framework_TestCase {
 
   /**
    * @var object
@@ -66,30 +56,58 @@ class AuthenticatedUser extends \PHPUnit_Framework_TestCase {
    */
   protected static $fields;
 
+  /**
+   * @var array
+   */
   protected static $expectedValueEmpty = array();
 
+  /**
+   * @var int|string
+   */
   protected static $valueOne = 1;
 
+  /**
+   * @var int|string
+   */
   protected static $expectedValueOne = 1;
 
+  /**
+   * @var array
+   */
   protected static $valueMultiple = array(1, 0);
 
+  /**
+   * @var array
+   */
   protected static $expectedValueMultiple = array(1, 0);
 
+  /**
+   * @var array|int|string
+   */
   protected static $valueZero = array(0);
 
+  /**
+   * @var int
+   */
   protected static $expectedValueZero = 0;
 
+  /**
+   * Create an authenticated user and log in as that user.
+   */
   public static function setUpBeforeClass() {
-    static::$fillFunctionName = 'fill' . Utils::makeTitleCase(static::$field_name) . 'Values';
-    static::$fillDefaultFunctionName = 'fill' . Utils::makeTitleCase(static::$field_name) . 'Values';
-
-    //static::$transaction = db_transaction();
+    static::$fillFunctionName = 'fill' . Utils::makeTitleCase(
+        static::$field_name
+      ) . 'Values';
+    static::$fillDefaultFunctionName = 'fill' . Utils::makeTitleCase(
+        static::$field_name
+      ) . 'Values';
 
     list($success, $userObject, $msg) = User::createDefault();
     static::assertTrue($success, $msg);
 
-    list($success, self::$userObject, $msg) = User::loginProgrammatically($userObject->getId());
+    list($success, self::$userObject, $msg) = User::loginProgrammatically(
+      $userObject->getId()
+    );
     self::assertTrue($success, $msg);
   }
 
@@ -146,7 +164,9 @@ class AuthenticatedUser extends \PHPUnit_Framework_TestCase {
   public function testValueOneSubmission() {
     $testForm = new TestForm(static::$nid);
 
-    list($success, $values, $msg) = $testForm->{static::$fillFunctionName}(static::$valueOne);
+    list($success, $values, $msg) = $testForm->{static::$fillFunctionName}(
+      static::$valueOne
+    );
     $this->assertTrue($success, $msg);
     $this->assertEquals(
       static::$expectedValueOne,
@@ -170,7 +190,9 @@ class AuthenticatedUser extends \PHPUnit_Framework_TestCase {
   public function testValueMultipleSubmission() {
     $testForm = new TestForm(static::$nid);
 
-    list($success, $values, $msg) = $testForm->{static::$fillFunctionName}(static::$valueMultiple);
+    list($success, $values, $msg) = $testForm->{static::$fillFunctionName}(
+      static::$valueMultiple
+    );
     $this->assertTrue($success, $msg);
     $this->assertEquals(
       static::$expectedValueMultiple,
@@ -209,9 +231,15 @@ class AuthenticatedUser extends \PHPUnit_Framework_TestCase {
   public function testValueZeroSubmission() {
     $testForm = new TestForm(static::$nid);
 
-    list($success, $values, $msg) = $testForm->{static::$fillFunctionName}(static::$valueZero);
+    list($success, $values, $msg) = $testForm->{static::$fillFunctionName}(
+      static::$valueZero
+    );
     $this->assertTrue($success, $msg);
-    $this->assertEquals(static::$expectedValueZero, $values, "Values filled into " . static::$field_name . " are not correct.");
+    $this->assertEquals(
+      static::$expectedValueZero,
+      $values,
+      "Values filled into " . static::$field_name . " are not correct."
+    );
     static::$fields[static::$field_name] = static::$expectedValueZero;
 
     list($success, $nodeObject, $msg) = $testForm->submit();
@@ -231,7 +259,11 @@ class AuthenticatedUser extends \PHPUnit_Framework_TestCase {
 
     list($success, $values, $msg) = $testForm->{static::$fillFunctionName}();
     $this->assertTrue($success, $msg);
-    $this->assertEquals(static::$expectedValueEmpty, $values, "Values filled into " . static::$field_name . " are not correct.");
+    $this->assertEquals(
+      static::$expectedValueEmpty,
+      $values,
+      "Values filled into " . static::$field_name . " are not correct."
+    );
     static::$fields[static::$field_name] = $values;
 
     list($success, $nodeObject, $msg) = $testForm->submit();
@@ -250,7 +282,8 @@ class AuthenticatedUser extends \PHPUnit_Framework_TestCase {
     for ($i = 0; $i < 5; $i++) {
       $testForm = new TestForm(static::$nid);
 
-      list($success, $values, $msg) = $testForm->{static::$fillDefaultFunctionName}();
+      list($success, $values, $msg) = $testForm->{static::$fillDefaultFunctionName}(
+      );
       $this->assertTrue($success, $msg);
       static::$fields[static::$field_name] = $values;
 
@@ -277,15 +310,5 @@ class AuthenticatedUser extends \PHPUnit_Framework_TestCase {
     $fields['title'] = '';
 
     return $fields;
-  }
-
-  /**
-   * Log out and delete the entities created in this test.
-   */
-  public static function tearDownAfterClass() {
-    static::$userObject->logout();
-    Utils::deleteCreatedEntities();
-
-    //static::$transaction->rollback();
   }
 }

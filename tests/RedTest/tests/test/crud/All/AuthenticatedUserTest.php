@@ -9,6 +9,7 @@
 namespace RedTest\tests\test\crud;
 
 use RedTest\core\entities\User;
+use RedTest\core\RedTest_Framework_TestCase;
 use RedTest\core\Utils;
 use RedTest\entities\Node\Test;
 use RedTest\forms\entities\Node\TestForm;
@@ -16,36 +17,17 @@ use RedTest\core\Menu;
 use RedTest\core\View;
 use RedTest\entities\TaxonomyTerm\Tags;
 
-/**
- * Drupal root directory.
- */
-if (!defined('DRUPAL_ROOT')) {
-  define('DRUPAL_ROOT', getcwd());
-}
-require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
-if (empty($_SERVER['SERVER_SOFTWARE'])) {
-  drupal_override_server_variables(array('SERVER_SOFTWARE' => 'RedTest'));
-}
-drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 
-class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
-
-  /**
-   * @var array
-   */
-  protected $backupGlobalsBlacklist = array(
-    'user',
-    'entities',
-    'language',
-    'language_url',
-    'language_content'
-  );
+class AuthenticatedUserTest extends RedTest_Framework_TestCase {
 
   /**
    * @var User
    */
   private static $userObject;
 
+  /**
+   * Create an authenticated user and log in as that user.
+   */
   public static function setupBeforeClass() {
     list($success, $userObject, $msg) = User::createDefault();
     self::assertTrue($success, $msg);
@@ -153,9 +135,4 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
     //print_r($view->hasAccess());
     $userObject->logout();
   }*/
-
-  public static function tearDownAfterClass() {
-    self::$userObject->logout();
-    Utils::deleteCreatedEntities();
-  }
 }
