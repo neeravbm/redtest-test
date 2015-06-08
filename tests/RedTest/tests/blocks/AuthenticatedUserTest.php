@@ -16,7 +16,7 @@ use RedTest\core\RedTest_Framework_TestCase;
 class AuthenticatedUserTest extends RedTest_Framework_TestCase {
 
   public static function setUpBeforeClass() {
-    list($success, $userObject, $msg) = User::createDefault();
+    list($success, $userObject, $msg) = User::createRandom();
     self::assertTrue($success, $msg);
 
     list($success, $userObject, $msg) = User::loginProgrammatically(

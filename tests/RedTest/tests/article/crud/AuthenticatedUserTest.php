@@ -30,7 +30,7 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
   protected $backupGlobalsBlacklist = array('user', 'entities');
 
   public static function setupBeforeClass() {
-    list($success, $userObject, $msg) = User::createDefault();
+    list($success, $userObject, $msg) = User::createRandom();
     self::assertTrue($success, $msg);
 
     self::$userObject = User::loginProgrammatically(
@@ -44,7 +44,7 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
      */
     $articleForm = new ArticleForm();
 
-    list($success, $fields, $msg) = $articleForm->fillDefaultValues();
+    list($success, $fields, $msg) = $articleForm->fillRandomValues();
     $this->assertTrue($success, $msg);
 
     list($success, $articleObject, $msg) = $articleForm->submit();

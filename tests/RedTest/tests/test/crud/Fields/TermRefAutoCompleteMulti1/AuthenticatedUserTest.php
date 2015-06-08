@@ -42,7 +42,7 @@ class AuthenticatedUserTest extends AuthenticatedUser {
 
     static::$fields = $this->getEmptyFieldValues();
 
-    list($success, $values, $msg) = $testForm->fillDefaultTitleValues();
+    list($success, $values, $msg) = $testForm->fillTitleRandomValues();
     $this->assertTrue($success, $msg);
     static::$fields['title'] = $values;
 
@@ -200,7 +200,7 @@ class AuthenticatedUserTest extends AuthenticatedUser {
     for ($i = 0; $i < 5; $i++) {
       $testForm = new TestForm(static::$nid);
 
-      list($success, $values, $msg) = $testForm->{static::$fillDefaultFunctionName}();
+      list($success, $values, $msg) = $testForm->{static::$fillRandomFunctionName}();
       $this->assertTrue($success, $msg);
       static::$fields[static::$field_name] = $values;
 

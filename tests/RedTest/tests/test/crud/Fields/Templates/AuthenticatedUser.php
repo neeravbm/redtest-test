@@ -39,7 +39,7 @@ class AuthenticatedUser extends RedTest_Framework_TestCase {
   /**
    * @var string
    */
-  protected static $fillDefaultFunctionName;
+  protected static $fillRandomFunctionName;
 
   /**
    * @var User
@@ -98,11 +98,11 @@ class AuthenticatedUser extends RedTest_Framework_TestCase {
     static::$fillFunctionName = 'fill' . Utils::makeTitleCase(
         static::$field_name
       ) . 'Values';
-    static::$fillDefaultFunctionName = 'fill' . Utils::makeTitleCase(
+    static::$fillRandomFunctionName = 'fill' . Utils::makeTitleCase(
         static::$field_name
       ) . 'Values';
 
-    list($success, $userObject, $msg) = User::createDefault();
+    list($success, $userObject, $msg) = User::createRandom();
     static::assertTrue($success, $msg);
 
     list($success, self::$userObject, $msg) = User::loginProgrammatically(
@@ -119,7 +119,7 @@ class AuthenticatedUser extends RedTest_Framework_TestCase {
 
     static::$fields = $this->getEmptyFieldValues();
 
-    list($success, $values, $msg) = $testForm->fillDefaultTitleValues();
+    list($success, $values, $msg) = $testForm->fillTitleRandomValues();
     $this->assertTrue($success, $msg);
     static::$fields['title'] = $values;
 
@@ -282,7 +282,7 @@ class AuthenticatedUser extends RedTest_Framework_TestCase {
     for ($i = 0; $i < 5; $i++) {
       $testForm = new TestForm(static::$nid);
 
-      list($success, $values, $msg) = $testForm->{static::$fillDefaultFunctionName}(
+      list($success, $values, $msg) = $testForm->{static::$fillRandomFunctionName}(
       );
       $this->assertTrue($success, $msg);
       static::$fields[static::$field_name] = $values;

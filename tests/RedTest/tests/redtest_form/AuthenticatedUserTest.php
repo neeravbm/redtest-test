@@ -32,7 +32,7 @@ class AuthenticatedUserTest extends RedTest_Framework_TestCase {
    * Create an authenticated user and log in.
    */
   public static function setupBeforeClass() {
-    list($success, $userObject, $msg) = User::createDefault();
+    list($success, $userObject, $msg) = User::createRandom();
     self::assertTrue($success, $msg);
 
     list($success, self::$userObject, $msg) = User::loginProgrammatically($userObject->getId());
@@ -47,11 +47,11 @@ class AuthenticatedUserTest extends RedTest_Framework_TestCase {
 
     $fields = array();
 
-    list($success, $values, $msg) = $form->fillDefaultRedtestTextfield1Values();
+    list($success, $values, $msg) = $form->fillRedtestTextfield1RandomValues();
     $this->assertTrue($success, $msg);
     $fields['redtext_textfield_1'] = $values;
 
-    list($success, $values, $msg) = $form->fillDefaultRedtestTextfield2Values();
+    list($success, $values, $msg) = $form->fillRedtestTextfield2RandomValues();
     $this->assertTrue($success, $msg);
     $fields['redtext_textfield_2'] = $values;
 

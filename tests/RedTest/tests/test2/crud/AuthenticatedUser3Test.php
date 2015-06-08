@@ -39,14 +39,14 @@ class AuthenticatedUser3Test extends \PHPUnit_Framework_TestCase {
   private static $userObject;
 
   public static function setupBeforeClass() {
-    list($success, $userObject, $msg) = User::createDefault();
+    list($success, $userObject, $msg) = User::createRandom();
     self::assertTrue($success, $msg);
 
     list($success, self::$userObject, $msg) = User::loginProgrammatically($userObject->getId());
     self::assertTrue($success, $msg);
   }
 
-  public function testAllDefault() {
+  public function testAllRandom() {
     $this->assertEquals(
       'node_add',
       Menu::getPageCallback('node/add/test-2'),
@@ -61,7 +61,7 @@ class AuthenticatedUser3Test extends \PHPUnit_Framework_TestCase {
     /*for ($i = 0; $i < 100; $i++) {
       $testForm = new Test2Form();
 
-      list($success, $fields, $msg) = $testForm->fillDefaultValues();
+      list($success, $fields, $msg) = $testForm->fillRandomValues();
       $this->assertTrue($success, $msg);
 
       list($success, $nodeObject, $msg) = $testForm->submit();
@@ -73,7 +73,7 @@ class AuthenticatedUser3Test extends \PHPUnit_Framework_TestCase {
 
     $testForm = new Test2Form();
 
-    list($success, $fields, $msg) = $testForm->fillDefaultValues();
+    list($success, $fields, $msg) = $testForm->fillRandomValues();
     $this->assertTrue($success, $msg);
 
     list($success, $nodeObject, $msg) = $testForm->submit();
@@ -92,7 +92,7 @@ class AuthenticatedUser3Test extends \PHPUnit_Framework_TestCase {
 
     $testForm = new Test2Form($nodeObject->getId());
 
-    list($success, $fields, $msg) = $testForm->fillDefaultValues();
+    list($success, $fields, $msg) = $testForm->fillRandomValues();
     $this->assertTrue($success, $msg);
 
     list($success, $nodeObject, $msg) = $testForm->submit();

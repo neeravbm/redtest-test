@@ -43,7 +43,7 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
   private static $userObject;
 
   public static function setupBeforeClass() {
-    list($success, $userObject, $msg) = User::createDefault();
+    list($success, $userObject, $msg) = User::createRandom();
     self::assertTrue($success, $msg);
 
     list($success, self::$userObject, $msg) = User::loginProgrammatically(
@@ -52,7 +52,7 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
     self::assertTrue($success, $msg);
   }
 
-  public function testAllDefault() {
+  public function testAllRandom() {
     $this->assertEquals(
       'node_add',
       Menu::getPageCallback('node/add/test-2'),
@@ -64,7 +64,7 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
       "Authenticated user does not have access to create a Test 2 node."
     );
 
-    list($success, $tagsObjects, $msg) = Tags::createDefault(5);
+    list($success, $tagsObjects, $msg) = Tags::createRandom(5);
     $this->assertTrue($success, $msg);
 
     $testForm = new Test2Form();
@@ -77,7 +77,7 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
         ),
       ),
     );
-    list($success, $fields, $msg) = $testForm->fillDefaultValues($options);
+    list($success, $fields, $msg) = $testForm->fillRandomValues($options);
     $this->assertTrue($success, $msg);
 
     list($success, $nodeObject, $msg) = $testForm->submit();
@@ -96,7 +96,7 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
 
     $testForm = new Test2Form($nodeObject->getId());
 
-    list($success, $fields, $msg) = $testForm->fillDefaultValues($options);
+    list($success, $fields, $msg) = $testForm->fillRandomValues($options);
     $this->assertTrue($success, $msg);
 
     list($success, $nodeObject, $msg) = $testForm->submit();

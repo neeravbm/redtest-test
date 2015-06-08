@@ -53,7 +53,7 @@ class TalentContributorUserTest extends \PHPUnit_Framework_TestCase {
       'field_month_added',
       'field_currency_type',
     );
-    list($success, self::$purchasingContractObject, $msg) = PurchasingContract::createDefault(
+    list($success, self::$purchasingContractObject, $msg) = PurchasingContract::createRandom(
       1
     );
     self::assertTrue($success, $msg);

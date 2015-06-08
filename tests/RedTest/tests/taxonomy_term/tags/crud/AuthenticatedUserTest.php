@@ -51,7 +51,7 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
   private static $userObject;
 
   public static function setupBeforeClass() {
-    list($success, $userObject, $msg) = User::createDefault();
+    list($success, $userObject, $msg) = User::createRandom();
     self::assertTrue($success, $msg);
 
     User::logout();
@@ -89,7 +89,7 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
     list($success, $superuserObject, $msg) = User::loginProgrammatically(1);
     $this->assertTrue($success, $msg);
 
-    list($success, $tagsObject, $msg) = Tags::createDefault();
+    list($success, $tagsObject, $msg) = Tags::createRandom();
     $this->assertTrue($success, $msg);
 
     $superuserObject->logout();

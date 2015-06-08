@@ -97,7 +97,7 @@ class SuperUserTest extends \PHPUnit_Framework_TestCase {
   public function testTagsCreate() {
     $tagsForm = new TagsForm();
 
-    list($success, self::$fields, $msg) = $tagsForm->fillDefaultValues(
+    list($success, self::$fields, $msg) = $tagsForm->fillRandomValues(
       array('required_fields_only' => FALSE)
     );
     $this->assertTrue($success, $msg);
@@ -155,7 +155,7 @@ class SuperUserTest extends \PHPUnit_Framework_TestCase {
     list($success, $msg) = self::$tagsObject->checkValues(self::$fields);
     $this->assertTrue($success, $msg);
 
-    list($success, self::$fields, $msg) = $tagsForm->fillDefaultValues(
+    list($success, self::$fields, $msg) = $tagsForm->fillRandomValues(
       array('required_fields_only' => FALSE)
     );
     $this->assertTrue($success, $msg);

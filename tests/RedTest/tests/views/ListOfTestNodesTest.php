@@ -39,7 +39,7 @@ class ListOfTestNodesTest extends \PHPUnit_Framework_TestCase {
     list($success, $userObject, $msg) = User::loginProgrammatically(1);
     self::assertTrue($success, $msg);
 
-    list($success, self::$testObjects, $msg) = Test::createDefault(3);
+    list($success, self::$testObjects, $msg) = Test::createRandom(3);
     self::assertTrue($success, $msg);
     $userObject->logout();
   }
@@ -67,7 +67,7 @@ class ListOfTestNodesTest extends \PHPUnit_Framework_TestCase {
     // Log the user out if he is logged in.
     User::logout();
 
-    list($success, $userObject, $msg) = User::createDefault();
+    list($success, $userObject, $msg) = User::createRandom();
     $this->assertTrue($success, $msg);
 
     list($success, $userObject, $msg) = User::loginProgrammatically($userObject->getId());

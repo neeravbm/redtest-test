@@ -47,7 +47,7 @@ class AuthenticatedUser3Test extends \PHPUnit_Framework_TestCase {
   private static $userObject;
 
   public static function setupBeforeClass() {
-    list($success, $userObject, $msg) = User::createDefault();
+    list($success, $userObject, $msg) = User::createRandom();
     self::assertTrue($success, $msg);
 
     list($success, self::$userObject, $msg) = User::loginProgrammatically(
@@ -56,7 +56,7 @@ class AuthenticatedUser3Test extends \PHPUnit_Framework_TestCase {
     self::assertTrue($success, $msg);
   }
 
-  public function testAllDefault() {
+  public function testAllRandom() {
     $this->assertEquals(
       'node_add',
       Menu::getPageCallback('node/add/test'),
@@ -68,7 +68,7 @@ class AuthenticatedUser3Test extends \PHPUnit_Framework_TestCase {
       "Authenticated user does not have access to create a Test node."
     );
 
-    list($success, $tagsObjects, $msg) = Tags::createDefault(5);
+    list($success, $tagsObjects, $msg) = Tags::createRandom(5);
     $this->assertTrue($success, $msg);
 
     $testForm = new TestForm();
@@ -82,7 +82,7 @@ class AuthenticatedUser3Test extends \PHPUnit_Framework_TestCase {
       ),
     );
 
-    list($success, $fields, $msg) = $testForm->fillDefaultValues(
+    list($success, $fields, $msg) = $testForm->fillRandomValues(
       $options
     );
     $this->assertTrue($success, $msg);
@@ -103,7 +103,7 @@ class AuthenticatedUser3Test extends \PHPUnit_Framework_TestCase {
 
     $testForm = new TestForm($nodeObject->getId());
 
-    list($success, $fields, $msg) = $testForm->fillDefaultValues(
+    list($success, $fields, $msg) = $testForm->fillRandomValues(
       $options
     );
     $this->assertTrue($success, $msg);
@@ -132,11 +132,11 @@ class AuthenticatedUser3Test extends \PHPUnit_Framework_TestCase {
 
   /*public function testView() {
     $userObject = User::loginProgrammatically(1);
-    list($success, $testObjects, $msg) = Test::createDefault(3);
+    list($success, $testObjects, $msg) = Test::createRandom(3);
     $this->assertTrue($success, $msg);
     $userObject->logout();
 
-    list($success, $userObject, $msg) = User::createDefault();
+    list($success, $userObject, $msg) = User::createRandom();
     $this->assertTrue($success, $msg);
 
     $userObject = User::loginProgrammatically($userObject->getId());
