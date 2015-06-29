@@ -16,13 +16,11 @@ use RedTest\core\RedTest_Framework_TestCase;
 class AuthenticatedUserTest extends RedTest_Framework_TestCase {
 
   public static function setUpBeforeClass() {
-    list($success, $userObject, $msg) = User::createRandom();
-    self::assertTrue($success, $msg);
+    $userObject = User::createRandom()->verify(get_class());
 
-    list($success, $userObject, $msg) = User::loginProgrammatically(
-      $userObject->getId()
+    $userObject = User::loginProgrammatically($userObject->getId())->verify(
+      get_class()
     );
-    self::assertTrue($success, $msg);
   }
 
   public function testBlock1() {

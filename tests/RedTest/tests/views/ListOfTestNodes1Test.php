@@ -9,47 +9,30 @@
 namespace RedTest\tests\views;
 
 use RedTest\core\entities\User;
+use RedTest\core\RedTest_Framework_TestCase;
 use RedTest\entities\Node\Test;
 use RedTest\core\Utils;
 use RedTest\core\View;
 
-/**
- * Drupal root directory.
- */
-if (!defined('DRUPAL_ROOT')) {
-  define('DRUPAL_ROOT', getcwd());
-}
-require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
-if (empty($_SERVER['SERVER_SOFTWARE'])) {
-  drupal_override_server_variables(array('SERVER_SOFTWARE' => 'RedTest'));
-}
-drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 
-
-class ListOfTestNodes1Test extends \PHPUnit_Framework_TestCase {
-
-  /**
-   * @var array
-   */
-  protected $backupGlobalsBlacklist = array('user', 'entities', 'language', 'language_url', 'language_content');
+class ListOfTestNodes1Test extends RedTest_Framework_TestCase {
 
   private static $testObjects;
 
   public static function setUpBeforeClass() {
-    list($success, $userObject, $msg) = User::loginProgrammatically(1);
-    self::assertTrue($success, $msg);
+    $userObject = User::loginProgrammatically(1)->verify(get_class());
 
-    list($success, self::$testObjects, $msg) = Test::createRandom(3);
-    self::assertTrue($success, $msg);
+    self::$testObjects = Test::createRandom(3)->verify(get_class());
+
     $userObject->logout();
   }
 
   public function testAuthenticatedUser() {
-    list($success, $userObject, $msg) = User::createRandom();
-    $this->assertTrue($success, $msg);
+    $userObject = User::createRandom()->verify($this);
 
-    list($success, $userObject, $msg) = User::loginProgrammatically($userObject->getId());
-    $this->assertTrue($success, $msg);
+    $userObject = User::loginProgrammatically($userObject->getId())->verify(
+      $this
+    );
 
     /*Utils::sort(self::$testObjects, "nid DESC");
 

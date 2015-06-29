@@ -32,11 +32,10 @@ class AuthenticatedUserTest extends RedTest_Framework_TestCase {
    * Create an authenticated user and log in.
    */
   public static function setupBeforeClass() {
-    list($success, $userObject, $msg) = User::createRandom();
-    self::assertTrue($success, $msg);
+    $userObject = User::createRandom()->verify(get_class());
 
-    list($success, self::$userObject, $msg) = User::loginProgrammatically($userObject->getId());
-    self::assertTrue($success, $msg);
+    self::$userObject = User::loginProgrammatically($userObject->getId())
+      ->verify(get_class());
   }
 
   /**
@@ -44,19 +43,17 @@ class AuthenticatedUserTest extends RedTest_Framework_TestCase {
    */
   public function testIndividualFieldSubmission() {
     $form = new Form('redtest_form');
+    $form->verify($this);
 
     $fields = array();
 
-    list($success, $values, $msg) = $form->fillRedtestTextfield1RandomValues();
-    $this->assertTrue($success, $msg);
+    $values = $form->fillRedtestTextfield1RandomValues()->verify($this);
     $fields['redtext_textfield_1'] = $values;
 
-    list($success, $values, $msg) = $form->fillRedtestTextfield2RandomValues();
-    $this->assertTrue($success, $msg);
+    $values = $form->fillRedtestTextfield2RandomValues()->verify($this);
     $fields['redtext_textfield_2'] = $values;
 
-    list($success, $msg) = $form->pressButton();
-    $this->assertTrue($success, $msg);
+    $form->pressButton()->verify($this);
 
     $this->assertEquals(
       $fields['redtext_textfield_1'],

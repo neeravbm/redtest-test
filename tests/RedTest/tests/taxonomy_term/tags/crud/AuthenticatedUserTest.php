@@ -9,41 +9,13 @@
 namespace RedTest\tests\taxonomy_term\crud;
 
 use RedTest\core\entities\User;
+use RedTest\core\RedTest_Framework_TestCase;
 use RedTest\core\Utils;
 use RedTest\core\Menu;
 use RedTest\entities\TaxonomyTerm\Tags;
 
-/**
- * Drupal root directory.
- */
-if (!defined('DRUPAL_ROOT')) {
-  define('DRUPAL_ROOT', getcwd());
-}
-require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
-// We need to provide a non-empty SERVER_SOFTWARE so that execution doesn't get
-// treated as command-line execution by drupal_is_cli() function. If it is
-// treated as command-line execution, then drupal_session_start() doesn't invoke
-// session_start(). As a result, session_destroy() in User::logout() function
-// throws an error. Although this does not affect RedTest execution or even
-// session handling, it's better to not let Drupal throw this error in the first
-// place.
-if (empty($_SERVER['SERVER_SOFTWARE'])) {
-  drupal_override_server_variables(array('SERVER_SOFTWARE' => 'RedTest'));
-}
-drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 
-class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
-
-  /**
-   * @var array
-   */
-  protected $backupGlobalsBlacklist = array(
-    'user',
-    'entities',
-    'language',
-    'language_url',
-    'language_content'
-  );
+class AuthenticatedUserTest extends RedTest_Framework_TestCase {
 
   /**
    * @var User
@@ -51,13 +23,14 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
   private static $userObject;
 
   public static function setupBeforeClass() {
-    list($success, $userObject, $msg) = User::createRandom();
-    self::assertTrue($success, $msg);
+    $userObject = User::createRandom()->verify(get_class());
 
     User::logout();
 
-    list($success, self::$userObject, $msg) = User::login($userObject->getNameValues(), $userObject->getPasswordValues());
-    self::assertTrue($success, $msg);
+    self::$userObject = User::login(
+      $userObject->getNameValues(),
+      $userObject->getPasswordValues()
+    )->verify(get_class());
   }
 
   public function testTagsCreationAccess() {
@@ -85,20 +58,14 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
 
   public function testTagsUpdateAccess() {
     User::logout();
-
-    list($success, $superuserObject, $msg) = User::loginProgrammatically(1);
-    $this->assertTrue($success, $msg);
-
-    list($success, $tagsObject, $msg) = Tags::createRandom();
-    $this->assertTrue($success, $msg);
-
+    $superuserObject = User::loginProgrammatically(1)->verify($this);
+    $tagsObject = Tags::createRandom()->verify($this);
     $superuserObject->logout();
 
-    list($success, self::$userObject, $msg) = User::login(self::$userObject->getNameValues(), self::$userObject->getPasswordValues());
-    /*list($success, self::$userObject, $msg) = User::loginProgrammatically(
-      self::$userObject->getId()
-    );*/
-    $this->assertTrue($success, $msg);
+    self::$userObject = User::login(
+      self::$userObject->getNameValues(),
+      self::$userObject->getPasswordValues()
+    )->verify($this);
 
     $tid = $tagsObject->getId();
     $path = "taxonomy/term/$tid/edit";

@@ -9,37 +9,15 @@
 namespace RedTest\tests\test\crud;
 
 use RedTest\core\entities\User;
+use RedTest\core\RedTest_Framework_TestCase;
 use RedTest\core\Utils;
 use RedTest\entities\Node\Test;
 use RedTest\forms\entities\Node\TestForm;
 use RedTest\core\Menu;
-use RedTest\core\View;
 use RedTest\entities\TaxonomyTerm\Tags;
 
-/**
- * Drupal root directory.
- */
-if (!defined('DRUPAL_ROOT')) {
-  define('DRUPAL_ROOT', getcwd());
-}
-require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
-if (empty($_SERVER['SERVER_SOFTWARE'])) {
-  drupal_override_server_variables(array('SERVER_SOFTWARE' => 'RedTest'));
-}
-drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 
-class AuthenticatedUser2Test extends \PHPUnit_Framework_TestCase {
-
-  /**
-   * @var array
-   */
-  protected $backupGlobalsBlacklist = array(
-    'user',
-    'entities',
-    'language',
-    'language_url',
-    'language_content'
-  );
+class AuthenticatedUser2Test extends RedTest_Framework_TestCase {
 
   /**
    * @var User
@@ -47,13 +25,10 @@ class AuthenticatedUser2Test extends \PHPUnit_Framework_TestCase {
   private static $userObject;
 
   public static function setupBeforeClass() {
-    list($success, $userObject, $msg) = User::createRandom();
-    self::assertTrue($success, $msg);
+    $userObject = User::createRandom()->verify(get_class());
 
-    list($success, self::$userObject, $msg) = User::loginProgrammatically(
-      $userObject->getId()
-    );
-    self::assertTrue($success, $msg);
+    self::$userObject = User::loginProgrammatically($userObject->getId())
+      ->verify(get_class());
   }
 
   public function testAllRandom() {
@@ -68,10 +43,10 @@ class AuthenticatedUser2Test extends \PHPUnit_Framework_TestCase {
       "Authenticated user does not have access to create a Test node."
     );
 
-    list($success, $tagsObjects, $msg) = Tags::createRandom(5);
-    $this->assertTrue($success, $msg);
+    $tagsObjects = Tags::createRandom(5)->verify($this);
 
     $testForm = new TestForm();
+    $testForm->verify($this);
 
     $options = array(
       'required_fields_only' => FALSE,
@@ -82,37 +57,27 @@ class AuthenticatedUser2Test extends \PHPUnit_Framework_TestCase {
       ),
     );
 
-    list($success, $fields, $msg) = $testForm->fillRandomValues(
-      $options
-    );
-    $this->assertTrue($success, $msg);
+    $fields = $testForm->fillRandomValues($options)->verify($this);
 
-    list($success, $nodeObject, $msg) = $testForm->submit();
-    $this->assertTrue($success, $msg);
+    $nodeObject = $testForm->submit()->verify($this);
 
-    list($success, $msg) = $nodeObject->checkValues($fields);
-    $this->assertTrue($success, $msg);
+    $nodeObject->checkValues($fields)->verify($this);
 
     $testForm = new TestForm($nodeObject->getId());
+    $testForm->verify($this);
 
-    list($success, $nodeObject, $msg) = $testForm->submit();
-    $this->assertTrue($success, $msg);
+    $nodeObject = $testForm->submit()->verify($this);
 
-    list($success, $msg) = $nodeObject->checkValues($fields);
-    $this->assertTrue($success, $msg);
+    $nodeObject->checkValues($fields)->verify($this);
 
     $testForm = new TestForm($nodeObject->getId());
+    $testForm->verify($this);
 
-    list($success, $fields, $msg) = $testForm->fillRandomValues(
-      $options
-    );
-    $this->assertTrue($success, $msg);
+    $fields = $testForm->fillRandomValues($options)->verify($this);
 
-    list($success, $nodeObject, $msg) = $testForm->submit();
-    $this->assertTrue($success, $msg);
+    $nodeObject = $testForm->submit()->verify($this);
 
-    list($success, $msg) = $nodeObject->checkValues($fields);
-    $this->assertTrue($success, $msg);
+    $nodeObject->checkValues($fields)->verify($this);
 
     $this->assertTrue(
       $nodeObject->hasViewAccess(),

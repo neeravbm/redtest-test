@@ -102,13 +102,9 @@ class AuthenticatedUser extends RedTest_Framework_TestCase {
         static::$field_name
       ) . 'Values';
 
-    list($success, $userObject, $msg) = User::createRandom();
-    static::assertTrue($success, $msg);
-
-    list($success, self::$userObject, $msg) = User::loginProgrammatically(
-      $userObject->getId()
-    );
-    self::assertTrue($success, $msg);
+    $userObject = User::createRandom()->verify(get_class());
+    self::$userObject = User::loginProgrammatically($userObject->getId())
+      ->verify(get_class());
   }
 
   /**
@@ -116,15 +112,15 @@ class AuthenticatedUser extends RedTest_Framework_TestCase {
    */
   public function testEmptySubmission() {
     $testForm = new TestForm();
+    $testForm->verify($this);
 
     static::$fields = $this->getEmptyFieldValues();
 
-    list($success, $values, $msg) = $testForm->fillTitleRandomValues();
-    $this->assertTrue($success, $msg);
-    static::$fields['title'] = $values;
+    static::$fields['title'] = $testForm->fillTitleRandomValues()->verify(
+      $this
+    );
 
-    list($success, $values, $msg) = $testForm->{static::$fillFunctionName}();
-    $this->assertTrue($success, $msg);
+    $values = $testForm->{static::$fillFunctionName}()->verify($this);
     $this->assertEquals(
       static::$expectedValueEmpty,
       $values,
@@ -132,11 +128,9 @@ class AuthenticatedUser extends RedTest_Framework_TestCase {
     );
     static::$fields[static::$field_name] = $values;
 
-    list($success, $nodeObject, $msg) = $testForm->submit();
-    $this->assertTrue($success, $msg);
+    $nodeObject = $testForm->submit()->verify($this);
 
-    list($success, $msg) = $nodeObject->checkValues(static::$fields);
-    $this->assertTrue($success, $msg);
+    $nodeObject->checkValues(static::$fields)->verify($this);
 
     static::$nid = $nodeObject->getId();
   }
@@ -148,12 +142,11 @@ class AuthenticatedUser extends RedTest_Framework_TestCase {
    */
   public function testEmptySubmissionWithoutChange() {
     $testForm = new TestForm(static::$nid);
+    $testForm->verify($this);
 
-    list($success, $nodeObject, $msg) = $testForm->submit();
-    $this->assertTrue($success, $msg);
+    $nodeObject = $testForm->submit()->verify($this);
 
-    list($success, $msg) = $nodeObject->checkValues(static::$fields);
-    $this->assertTrue($success, $msg);
+    $nodeObject->checkValues(static::$fields)->verify($this);
   }
 
   /**
@@ -163,11 +156,11 @@ class AuthenticatedUser extends RedTest_Framework_TestCase {
    */
   public function testValueOneSubmission() {
     $testForm = new TestForm(static::$nid);
+    $testForm->verify($this);
 
-    list($success, $values, $msg) = $testForm->{static::$fillFunctionName}(
-      static::$valueOne
+    $values = $testForm->{static::$fillFunctionName}(static::$valueOne)->verify(
+      $this
     );
-    $this->assertTrue($success, $msg);
     $this->assertEquals(
       static::$expectedValueOne,
       $values,
@@ -175,11 +168,9 @@ class AuthenticatedUser extends RedTest_Framework_TestCase {
     );
     static::$fields[static::$field_name] = $values;
 
-    list($success, $nodeObject, $msg) = $testForm->submit();
-    $this->assertTrue($success, $msg);
+    $nodeObject = $testForm->submit()->verify($this);
 
-    list($success, $msg) = $nodeObject->checkValues(static::$fields);
-    $this->assertTrue($success, $msg);
+    $nodeObject->checkValues(static::$fields)->verify($this);
   }
 
   /**
@@ -189,11 +180,10 @@ class AuthenticatedUser extends RedTest_Framework_TestCase {
    */
   public function testValueMultipleSubmission() {
     $testForm = new TestForm(static::$nid);
+    $testForm->verify($this);
 
-    list($success, $values, $msg) = $testForm->{static::$fillFunctionName}(
-      static::$valueMultiple
-    );
-    $this->assertTrue($success, $msg);
+    $values = $testForm->{static::$fillFunctionName}(static::$valueMultiple)
+      ->verify($this);
     $this->assertEquals(
       static::$expectedValueMultiple,
       $values,
@@ -201,11 +191,9 @@ class AuthenticatedUser extends RedTest_Framework_TestCase {
     );
     static::$fields[static::$field_name] = $values;
 
-    list($success, $nodeObject, $msg) = $testForm->submit();
-    $this->assertTrue($success, $msg);
+    $nodeObject = $testForm->submit()->verify($this);
 
-    list($success, $msg) = $nodeObject->checkValues(static::$fields);
-    $this->assertTrue($success, $msg);
+    $nodeObject->checkValues(static::$fields)->verify($this);
   }
 
   /**
@@ -215,12 +203,11 @@ class AuthenticatedUser extends RedTest_Framework_TestCase {
    */
   public function testEmptySubmissionWithoutChange2() {
     $testForm = new TestForm(static::$nid);
+    $testForm->verify($this);
 
-    list($success, $nodeObject, $msg) = $testForm->submit();
-    $this->assertTrue($success, $msg);
+    $nodeObject = $testForm->submit()->verify($this);
 
-    list($success, $msg) = $nodeObject->checkValues(static::$fields);
-    $this->assertTrue($success, $msg);
+    $nodeObject->checkValues(static::$fields)->verify($this);
   }
 
   /**
@@ -230,11 +217,10 @@ class AuthenticatedUser extends RedTest_Framework_TestCase {
    */
   public function testValueZeroSubmission() {
     $testForm = new TestForm(static::$nid);
+    $testForm->verify($this);
 
-    list($success, $values, $msg) = $testForm->{static::$fillFunctionName}(
-      static::$valueZero
-    );
-    $this->assertTrue($success, $msg);
+    $values = $testForm->{static::$fillFunctionName}(static::$valueZero)
+      ->verify($this);
     $this->assertEquals(
       static::$expectedValueZero,
       $values,
@@ -242,11 +228,9 @@ class AuthenticatedUser extends RedTest_Framework_TestCase {
     );
     static::$fields[static::$field_name] = static::$expectedValueZero;
 
-    list($success, $nodeObject, $msg) = $testForm->submit();
-    $this->assertTrue($success, $msg);
+    $nodeObject = $testForm->submit()->verify($this);
 
-    list($success, $msg) = $nodeObject->checkValues(static::$fields);
-    $this->assertTrue($success, $msg);
+    $nodeObject->checkValues(static::$fields)->verify($this);
   }
 
   /**
@@ -256,9 +240,9 @@ class AuthenticatedUser extends RedTest_Framework_TestCase {
    */
   public function testEmptySubmission2() {
     $testForm = new TestForm(static::$nid);
+    $testForm->verify($this);
 
-    list($success, $values, $msg) = $testForm->{static::$fillFunctionName}();
-    $this->assertTrue($success, $msg);
+    $values = $testForm->{static::$fillFunctionName}()->verify($this);
     $this->assertEquals(
       static::$expectedValueEmpty,
       $values,
@@ -266,11 +250,9 @@ class AuthenticatedUser extends RedTest_Framework_TestCase {
     );
     static::$fields[static::$field_name] = $values;
 
-    list($success, $nodeObject, $msg) = $testForm->submit();
-    $this->assertTrue($success, $msg);
+    $nodeObject = $testForm->submit()->verify($this);
 
-    list($success, $msg) = $nodeObject->checkValues(static::$fields);
-    $this->assertTrue($success, $msg);
+    $nodeObject->checkValues(static::$fields)->verify($this);
   }
 
   /**
@@ -281,17 +263,14 @@ class AuthenticatedUser extends RedTest_Framework_TestCase {
   public function testDefaltValues() {
     for ($i = 0; $i < 5; $i++) {
       $testForm = new TestForm(static::$nid);
+      $testForm->verify($this);
 
-      list($success, $values, $msg) = $testForm->{static::$fillRandomFunctionName}(
-      );
-      $this->assertTrue($success, $msg);
+      $values = $testForm->{static::$fillRandomFunctionName}()->verify($this);
       static::$fields[static::$field_name] = $values;
 
-      list($success, $nodeObject, $msg) = $testForm->submit();
-      $this->assertTrue($success, $msg);
+      $nodeObject = $testForm->submit()->verify($this);
 
-      list($success, $msg) = $nodeObject->checkValues(static::$fields);
-      $this->assertTrue($success, $msg);
+      $nodeObject->checkValues(static::$fields)->verify($this);
     }
   }
 

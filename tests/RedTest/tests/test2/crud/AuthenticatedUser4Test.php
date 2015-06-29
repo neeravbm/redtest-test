@@ -9,6 +9,7 @@
 namespace tests\RedTest\tests\test2\crud;
 
 use RedTest\core\entities\User;
+use RedTest\core\RedTest_Framework_TestCase;
 use RedTest\core\Utils;
 use RedTest\entities\Node\Test;
 use RedTest\entities\Node\Test2;
@@ -17,21 +18,8 @@ use RedTest\forms\entities\Node\TestForm;
 use RedTest\core\Menu;
 use RedTest\core\View;
 
-/**
- * Drupal root directory.
- */
-if (!defined('DRUPAL_ROOT')) {
-  define('DRUPAL_ROOT', getcwd());
-}
-require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
-if (empty($_SERVER['SERVER_SOFTWARE'])) {
-  drupal_override_server_variables(array('SERVER_SOFTWARE' => 'RedTest'));
-}
-drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 
-class AuthenticatedUser4Test extends \PHPUnit_Framework_TestCase {
-
-  protected $backupGlobalsBlacklist = array('user', 'entities');
+class AuthenticatedUser4Test extends RedTest_Framework_TestCase {
 
   /**
    * @var User

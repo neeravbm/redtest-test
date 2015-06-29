@@ -9,33 +9,15 @@
 namespace tests\RedTest\tests\test2\crud;
 
 use RedTest\core\entities\User;
+use RedTest\core\RedTest_Framework_TestCase;
 use RedTest\core\Utils;
 use RedTest\entities\Node\Test2;
 use RedTest\entities\TaxonomyTerm\Tags;
 use RedTest\forms\entities\Node\Test2Form;
 use RedTest\core\Menu;
 
-/**
- * Drupal root directory.
- */
-if (!defined('DRUPAL_ROOT')) {
-  define('DRUPAL_ROOT', getcwd());
-}
-require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
-if (empty($_SERVER['SERVER_SOFTWARE'])) {
-  drupal_override_server_variables(array('SERVER_SOFTWARE' => 'RedTest'));
-}
-drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 
-class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
-
-  protected $backupGlobalsBlacklist = array(
-    'user',
-    'entities',
-    'language',
-    'language_url',
-    'language_content'
-  );
+class AuthenticatedUserTest extends RedTest_Framework_TestCase {
 
   /**
    * @var User

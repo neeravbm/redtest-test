@@ -14,7 +14,6 @@ use RedTest\core\Utils;
 use RedTest\entities\Node\Test;
 use RedTest\forms\entities\Node\TestForm;
 use RedTest\core\Menu;
-use RedTest\core\View;
 use RedTest\entities\TaxonomyTerm\Tags;
 
 
@@ -25,17 +24,11 @@ class AuthenticatedUserTest extends RedTest_Framework_TestCase {
    */
   private static $userObject;
 
-  /**
-   * Create an authenticated user and log in as that user.
-   */
   public static function setupBeforeClass() {
-    list($success, $userObject, $msg) = User::createRandom();
-    self::assertTrue($success, $msg);
+    $userObject = User::createRandom()->verify(get_class());
 
-    list($success, self::$userObject, $msg) = User::loginProgrammatically(
-      $userObject->getId()
-    );
-    self::assertTrue($success, $msg);
+    self::$userObject = User::loginProgrammatically($userObject->getId())
+      ->verify(get_class());
   }
 
   public function testAllRandom() {
@@ -50,10 +43,10 @@ class AuthenticatedUserTest extends RedTest_Framework_TestCase {
       "Authenticated user does not have access to create a Test node."
     );
 
-    list($success, $tagsObjects, $msg) = Tags::createRandom(5);
-    $this->assertTrue($success, $msg);
+    $tagsObjects = Tags::createRandom(5)->verify($this);
 
     $testForm = new TestForm();
+    $testForm->verify($this);
 
     $options = array(
       'required_fields_only' => FALSE,
@@ -64,37 +57,27 @@ class AuthenticatedUserTest extends RedTest_Framework_TestCase {
       ),
     );
 
-    list($success, $fields, $msg) = $testForm->fillRandomValues(
-      $options
-    );
-    $this->assertTrue($success, $msg);
+    $fields = $testForm->fillRandomValues($options)->verify($this);
 
-    list($success, $nodeObject, $msg) = $testForm->submit();
-    $this->assertTrue($success, $msg);
+    $nodeObject = $testForm->submit()->verify($this);
 
-    list($success, $msg) = $nodeObject->checkValues($fields);
-    $this->assertTrue($success, $msg);
+    $nodeObject->checkValues($fields)->verify($this);
 
     $testForm = new TestForm($nodeObject->getId());
+    $testForm->verify($this);
 
-    list($success, $nodeObject, $msg) = $testForm->submit();
-    $this->assertTrue($success, $msg);
+    $nodeObject = $testForm->submit()->verify($this);
 
-    list($success, $msg) = $nodeObject->checkValues($fields);
-    $this->assertTrue($success, $msg);
+    $nodeObject->checkValues($fields)->verify($this);
 
     $testForm = new TestForm($nodeObject->getId());
+    $testForm->verify($this);
 
-    list($success, $fields, $msg) = $testForm->fillRandomValues(
-      $options
-    );
-    $this->assertTrue($success, $msg);
+    $fields = $testForm->fillRandomValues($options)->verify($this);
 
-    list($success, $nodeObject, $msg) = $testForm->submit();
-    $this->assertTrue($success, $msg);
+    $nodeObject = $testForm->submit()->verify($this);
 
-    list($success, $msg) = $nodeObject->checkValues($fields);
-    $this->assertTrue($success, $msg);
+    $nodeObject->checkValues($fields)->verify($this);
 
     $this->assertTrue(
       $nodeObject->hasViewAccess(),
@@ -135,4 +118,9 @@ class AuthenticatedUserTest extends RedTest_Framework_TestCase {
     //print_r($view->hasAccess());
     $userObject->logout();
   }*/
+
+  public static function tearDownAfterClass() {
+    self::$userObject->logout();
+    Utils::deleteCreatedEntities();
+  }
 }
