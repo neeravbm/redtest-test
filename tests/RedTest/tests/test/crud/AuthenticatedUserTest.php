@@ -144,6 +144,6 @@ class AuthenticatedUserTest extends \PHPUnit_Framework_TestCase {
 
   public static function tearDownAfterClass() {
     self::$userObject->logout();
-    Utils::deleteCreatedEntities();
+    //Utils::deleteCreatedEntities();
   }
 }
