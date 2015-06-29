@@ -18,8 +18,12 @@ class TestForm extends NodeForm {
    * NodeForm directly because NodeForm's constructor is a protected function.
    *
    * @param null|int $nid
+   *   Node id if an existing node form needs to be loaded. If a new node form
+   *   is to be created, then keep it empty.
+   * @param array $options
+   *   Options array.
    */
-  public function __construct($nid = NULL) {
-    parent::__construct($nid);
+  public function __construct($nid = NULL, $options = array()) {
+    parent::__construct($nid, $options);
   }
 }

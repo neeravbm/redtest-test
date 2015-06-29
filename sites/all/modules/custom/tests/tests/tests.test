@@ -1,0 +1,41 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: neeravm
+ * Date: 5/2/15
+ * Time: 10:31 AM
+ */
+
+class Test2TestCase extends SiteTestCase {
+
+  public static function getInfo() {
+    return array(
+      'name' => t('Test 2 content type'),
+      'description' => t('Tests for Test 2 content type.'),
+      'group' => 'tests',
+      'mode' => 'site',
+    );
+  }
+
+  public function testCreateContent() {
+    $account = $this->drupalCreateUser(array('administer nodes', 'create page content'));
+    /*$account = user_load(1);
+    $account->name = "admin";
+    $account->pass_raw = "1234";*/
+    $this->drupalLogin($account);
+
+    for ($i = 0; $i < 1; $i++) {
+      $edit = array(
+        'title' => $this->randomName(20),
+        'body[und][0][value]' => $this->randomName(100),
+      );
+
+      $this->drupalPost('node/add/page', $edit, t('Save'));
+      $this->assertText(t('Basic page @title has been created.', array('@title' => $edit['title'])));
+
+      $node = $this->drupalGetNodeByTitle($edit['title']);
+      $this->assertEqual($edit['title'], $node->title, "Titles do not match.");
+      $this->assertEqual($edit['body[und][0][value]'], $node->body[LANGUAGE_NONE][0]['value'], "Body values do not match.");
+    }
+  }
+}

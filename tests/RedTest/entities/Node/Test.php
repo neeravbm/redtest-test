@@ -17,8 +17,9 @@ class Test extends Node {
    * Test. If we don't have this class, then other classes can't call
    * Node directly because NodeForm's constructor is a protected function.
    *
-   * @param int $nid
-   *   Node id if an existing node needs to be loaded.
+   * @param int|null $nid
+   *   Node id if an existing node needs to be loaded. If a new node is to be
+   *   created, then keep it empty.
    */
   public function __construct($nid = NULL) {
     parent::__construct($nid);

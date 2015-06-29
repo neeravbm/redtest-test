@@ -16,6 +16,15 @@ function redtest_common_menu() {
     'type' => MENU_CALLBACK,
   );
 
+  $items['redtest-form'] = array(
+    'title' => 'RedTest Form',
+    'description' => 'Custom form to test RedTest framework.',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('redtest_form'),
+  );
+
   return $items;
 }
 
@@ -541,5 +550,36 @@ function _filter_valide_data_text($data, $module, $field_name) {
   return $output;
 }
 
+/**
+ * Implements hook_init().
+ */
+function redtest_common_init() {
+  /*$view = views_get_view('list_of_test_nodes');
+  $view->init_display();
+  $view->pre_execute();
+  $view->execute();
+  dsm($view);*/
+}
 
+function redtest_form($form) {
+  $form = array();
+
+  $form['redtest_textfield_1'] = array(
+    '#title' => t('Textfield 1'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('redtest_textfield_1', ''),
+  );
+
+  $form['redtest_textfield_2'] = array(
+    '#title' => t('Textfield 2'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('redtest_textfield_2', 'Hello'),
+    '#maxlength' => 63,
+    '#size' => 20,
+  );
+
+  $form = system_settings_form($form);
+
+  return $form;
+}
 

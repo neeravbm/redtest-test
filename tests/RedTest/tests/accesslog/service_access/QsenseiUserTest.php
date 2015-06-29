@@ -80,8 +80,7 @@ class QsenseiUserTest extends \PHPUnit_Framework_TestCase {
       'field_territory',
     );
     list($success, self::$contractObject, $msg) = Contract::createDefault(
-      1,
-      $skip
+      1
     );
     self::assertTrue($success, $msg);
 
