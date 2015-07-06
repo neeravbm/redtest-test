@@ -15,7 +15,7 @@ use RedTest\entities\Node\Test;
 use RedTest\entities\Node\Test2;
 use RedTest\forms\entities\Node\Test2Form;
 use RedTest\forms\entities\Node\TestForm;
-use RedTest\core\Menu;
+use RedTest\core\Path;
 use RedTest\core\View;
 
 
@@ -30,14 +30,17 @@ class AuthenticatedUser3Test extends RedTest_Framework_TestCase {
     list($success, $userObject, $msg) = User::createRandom();
     self::assertTrue($success, $msg);
 
-    list($success, self::$userObject, $msg) = User::loginProgrammatically($userObject->getId());
+    list($success, self::$userObject, $msg) = User::loginProgrammatically(
+      $userObject->getId()
+    );
     self::assertTrue($success, $msg);
   }
 
   public function testAllRandom() {
+    $path = new Path('node/add/test-2');
     $this->assertEquals(
       'node_add',
-      Menu::getPageCallback('node/add/test-2'),
+      $path->getPageCallback(),
       "Page callback to add a Test node is incorrect."
     );
 

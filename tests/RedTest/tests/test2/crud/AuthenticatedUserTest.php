@@ -14,7 +14,7 @@ use RedTest\core\Utils;
 use RedTest\entities\Node\Test2;
 use RedTest\entities\TaxonomyTerm\Tags;
 use RedTest\forms\entities\Node\Test2Form;
-use RedTest\core\Menu;
+use RedTest\core\Path;
 
 
 class AuthenticatedUserTest extends RedTest_Framework_TestCase {
@@ -25,19 +25,18 @@ class AuthenticatedUserTest extends RedTest_Framework_TestCase {
   private static $userObject;
 
   public static function setupBeforeClass() {
-    list($success, $userObject, $msg) = User::createRandom();
-    self::assertTrue($success, $msg);
+    $userObject = User::createRandom()->verify(get_class());
 
-    list($success, self::$userObject, $msg) = User::loginProgrammatically(
+    self::$userObject = User::loginProgrammatically(
       $userObject->getId()
-    );
-    self::assertTrue($success, $msg);
+    )->verify(get_class());
   }
 
   public function testAllRandom() {
+    $path = new Path('node/add/test-2');
     $this->assertEquals(
       'node_add',
-      Menu::getPageCallback('node/add/test-2'),
+      $path->getPageCallback(),
       "Page callback to add a Test node is incorrect."
     );
 
@@ -46,10 +45,10 @@ class AuthenticatedUserTest extends RedTest_Framework_TestCase {
       "Authenticated user does not have access to create a Test 2 node."
     );
 
-    list($success, $tagsObjects, $msg) = Tags::createRandom(5);
-    $this->assertTrue($success, $msg);
+    $tagsObjects = Tags::createRandom(5)->verify($this);
 
     $testForm = new Test2Form();
+    $testForm->verify($this);
 
     $options = array(
       'required_fields_only' => FALSE,
@@ -59,42 +58,31 @@ class AuthenticatedUserTest extends RedTest_Framework_TestCase {
         ),
       ),
     );
-    list($success, $fields, $msg) = $testForm->fillRandomValues($options);
-    $this->assertTrue($success, $msg);
+    $fields = $testForm->fillRandomValues($options)->verify($this);
 
-    list($success, $nodeObject, $msg) = $testForm->submit();
-    $this->assertTrue($success, $msg);
+    $nodeObject = $testForm->submit()->verify($this);
 
-    list($success, $msg) = $nodeObject->checkValues($fields);
-    $this->assertTrue($success, $msg);
+    $nodeObject->checkValues($fields)->verify($this);
 
     $testForm = new Test2Form($nodeObject->getId());
+    $testForm->verify($this);
 
-    list($success, $nodeObject, $msg) = $testForm->submit();
-    $this->assertTrue($success, $msg);
+    $nodeObject = $testForm->submit()->verify($this);
 
-    list($success, $msg) = $nodeObject->checkValues($fields);
-    $this->assertTrue($success, $msg);
+    $nodeObject->checkValues($fields)->verify($this);
 
     $testForm = new Test2Form($nodeObject->getId());
+    $testForm->verify($this);
 
-    list($success, $fields, $msg) = $testForm->fillRandomValues($options);
-    $this->assertTrue($success, $msg);
+    $fields = $testForm->fillRandomValues($options)->verify($this);
 
-    list($success, $nodeObject, $msg) = $testForm->submit();
-    $this->assertTrue($success, $msg);
+    $nodeObject = $testForm->submit()->verify($this);
 
-    list($success, $msg) = $nodeObject->checkValues($fields);
-    $this->assertTrue($success, $msg);
+    $nodeObject->checkValues($fields)->verify($this);
 
     $this->assertTrue(
       $nodeObject->hasViewAccess(),
       "Authenticated user does not have access to view a Test node."
     );
-  }
-
-  public static function tearDownAfterClass() {
-    self::$userObject->logout();
-    Utils::deleteCreatedEntities();
   }
 }

@@ -12,5 +12,4 @@ use RedTest\core\RedTest_Framework_TestCase;
 
 class AnonymousUserTest extends RedTest_Framework_TestCase {
 
-  public function testCreation
 }

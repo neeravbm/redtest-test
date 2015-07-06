@@ -13,7 +13,7 @@ use RedTest\core\RedTest_Framework_TestCase;
 use RedTest\core\Utils;
 use RedTest\entities\Node\Test;
 use RedTest\forms\entities\Node\TestForm;
-use RedTest\core\Menu;
+use RedTest\core\Path;
 use RedTest\entities\TaxonomyTerm\Tags;
 
 
@@ -32,9 +32,10 @@ class AuthenticatedUser4Test extends RedTest_Framework_TestCase {
   }
 
   public function testAllRandom() {
+    $path = new Path('node/add/test');
     $this->assertEquals(
       'node_add',
-      Menu::getPageCallback('node/add/test'),
+      $path->getPageCallback(),
       "Page callback to add a Test node is incorrect."
     );
 
